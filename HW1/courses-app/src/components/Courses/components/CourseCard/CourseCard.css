@@ -1,0 +1,19 @@
+.courseCard {
+	display: grid;
+	grid-template-columns: 5fr 2fr;
+	color: #6b6f7a;
+	border: 1px solid rgb(191, 191, 191);
+	box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
+	margin: 15px 0;
+	padding: 10px;
+}
+
+.courseCardTitle {
+	color: black;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.showCourseButton {
+	margin: 10px 0;
+}

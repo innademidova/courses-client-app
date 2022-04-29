@@ -1,0 +1,10 @@
+.header {
+	display: grid;
+	grid-template-columns: 5fr 2fr;
+}
+
+.headerUserBlock {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	align-self: center;
+}
