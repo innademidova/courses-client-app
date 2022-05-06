@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-export const convertMinutesToHours = (duration) => {
+export const convertMinutesToHours = (duration: number | undefined) => {
 	if (!duration) {
 		return ' 00:00 hours';
 	}

@@ -2,6 +2,7 @@ export interface LoginResponse {
 	successful: boolean;
 	result: string;
 	user: User;
+	errors?: string[];
 }
 
 export interface User {

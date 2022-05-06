@@ -8,6 +8,8 @@ import {
 	labelText,
 	placeholderText,
 } from '../../common/constants/constants';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Registration = () => {
 	let navigate = useNavigate();
@@ -21,15 +23,21 @@ const Registration = () => {
 	};
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		return authAPI.register(newUser).then((response) => {
-			if (response.data.successful) {
-				navigate('/login');
-			}
-		});
+		return authAPI
+			.register(newUser)
+			.then((response) => {
+				if (response.data.successful) {
+					navigate('/login');
+				}
+			})
+			.catch((err) => {
+				err.response.data.errors.map((error: string) => toast.error(error));
+			});
 	};
 	return (
 		<div>
 			<h3>Registration</h3>
+			<ToastContainer />
 			<Form onSubmit={handleSubmit}>
 				<Input
 					labelText={labelText.name}
