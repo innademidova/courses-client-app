@@ -13,24 +13,34 @@ const Login = () => {
 	let navigate = useNavigate();
 	const [password, setInputPassword] = useState('');
 	const [email, setInputEmail] = useState('');
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		authAPI.login({ email, password }).then((response) => {
+			const token = response.data.result;
+			localStorage.setItem('access_token', token);
+			if (response.data.successful) {
+				navigate('/courses');
+			}
+		});
+	};
 	return (
 		<div>
 			<h3>Login</h3>
-			<Form onSubmit={() => authAPI.login()}>
+			<Form onSubmit={handleSubmit}>
 				<Input
 					labelText={labelText.email}
 					placeholder={placeholderText.email}
-					onChange={(event) => setInputEmail(event.target.value)}
+					onChange={(value) => setInputEmail(value)}
 					value={email}
 				/>
 				<Input
 					labelText={labelText.password}
 					placeholder={placeholderText.password}
-					onChange={(event) => setInputPassword(event.target.value)}
+					onChange={(value) => setInputPassword(value)}
 					value={password}
 				/>
 				<div>
-					<Button buttonText={buttonText.login} />
+					<Button type='submit' buttonText={buttonText.login} />
 				</div>
 			</Form>
 			<div>

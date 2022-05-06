@@ -1,6 +1,13 @@
 import { Form } from 'react-bootstrap';
 
-const Input = (props) => {
+interface Props {
+	labelText: string;
+	placeholder: string;
+	value: string;
+	onChange: (value: string) => void;
+}
+
+const Input = (props: Props) => {
 	const { labelText, onChange, ...other } = props;
 	return (
 		<Form.Group className='mb-3' controlId='exampleForm.ControlInput1'>
@@ -9,7 +16,7 @@ const Input = (props) => {
 				{...other}
 				onChange={(event) => {
 					event.target.value = event.target.value.trimStart();
-					onChange(event);
+					onChange(event.target.value);
 				}}
 			/>
 		</Form.Group>

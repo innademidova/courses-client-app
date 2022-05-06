@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { authAPI } from '../../api/api';
@@ -19,7 +19,7 @@ const Registration = () => {
 		password,
 		email,
 	};
-	const handleSubmit = (e) => {
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		return authAPI.register(newUser).then((response) => {
 			if (response.data.successful) {
@@ -34,19 +34,19 @@ const Registration = () => {
 				<Input
 					labelText={labelText.name}
 					placeholder={placeholderText.name}
-					onChange={(event) => setInputName(event.target.value)}
+					onChange={(value) => setInputName(value)}
 					value={name}
 				/>
 				<Input
 					labelText={labelText.email}
 					placeholder={placeholderText.email}
-					onChange={(event) => setInputEmail(event.target.value)}
+					onChange={(value) => setInputEmail(value)}
 					value={email}
 				/>
 				<Input
 					labelText={labelText.password}
 					placeholder={placeholderText.password}
-					onChange={(event) => setInputPassword(event.target.value)}
+					onChange={(value) => setInputPassword(value)}
 					value={password}
 				/>
 				<div>
