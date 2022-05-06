@@ -1,6 +1,7 @@
 import { Button } from '../../common';
 import { SearchBar, CourseCard } from '.';
 import { buttonText } from '../../common/constants/constants';
+import { PlusLg } from 'react-bootstrap-icons';
 
 const ExistedCourses = (props) => {
 	const search = (value) => {
@@ -32,6 +33,7 @@ const ExistedCourses = (props) => {
 				onClick={() => {
 					props.setIsAddCourse(true);
 				}}
+				icon={<PlusLg />}
 			/>
 		</div>
 	);

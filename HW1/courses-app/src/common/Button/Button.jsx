@@ -1,13 +1,12 @@
 import './Button.css';
+import DefaultButton from 'react-bootstrap/Button';
 const Button = (props) => {
+	const { icon, buttonText, variant, ...other } = props;
 	return (
-		<button
-			className='button'
-			disabled={props.disabled}
-			onClick={props.onClick}
-		>
-			{props.buttonText}
-		</button>
+		<DefaultButton variant='primary' {...other}>
+			{icon}
+			{buttonText}
+		</DefaultButton>
 	);
 };
 export default Button;

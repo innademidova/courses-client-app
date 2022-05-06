@@ -3,6 +3,9 @@ export const labelText = {
 	description: 'Description',
 	authorName: 'Author name',
 	duration: 'Duration',
+	name: 'Name',
+	email: 'Email',
+	password: 'Password',
 };
 export const placeholderText = {
 	title: 'Enter title',
@@ -10,6 +13,9 @@ export const placeholderText = {
 	authorName: 'Enter author name',
 	duration: 'Enter duration in minutes',
 	searchBar: 'Enter course name...',
+	name: 'Enter name',
+	email: 'Enter email',
+	password: 'Enter password',
 };
 export const buttonText = {
 	createAuthor: 'Create author',
@@ -20,6 +26,8 @@ export const buttonText = {
 	deleteAuthor: 'Delete author',
 	createCourse: 'Create course',
 	logOut: 'Logout',
+	registration: 'Registration',
+	login: 'Login',
 };
 export const inputName = {
 	title: 'title',

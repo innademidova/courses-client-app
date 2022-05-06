@@ -1,5 +1,6 @@
 import { Button } from '../../../common';
 import { buttonText } from '../../../common/constants/constants';
+import { PlusLg, Trash3 } from 'react-bootstrap-icons';
 const AddAuthors = (props) => {
 	return (
 		<div>
@@ -10,15 +11,18 @@ const AddAuthors = (props) => {
 					return (
 						<div key={author.id}>
 							<label>{author.name}</label>
-							<Button
-								onClick={() => {
-									props.setNewCourseAuthors([
-										...props.newCourseAuthors,
-										author.id,
-									]);
-								}}
-								buttonText={buttonText.addAuthor}
-							/>
+							<div>
+								<Button
+									onClick={() => {
+										props.setNewCourseAuthors([
+											...props.newCourseAuthors,
+											author.id,
+										]);
+									}}
+									buttonText={buttonText.addAuthor}
+									icon={<PlusLg />}
+								/>
+							</div>
 						</div>
 					);
 				})}
@@ -36,6 +40,7 @@ const AddAuthors = (props) => {
 									]);
 								}}
 								buttonText={buttonText.deleteAuthor}
+								icon={<Trash3 />}
 							/>
 						</div>
 					);

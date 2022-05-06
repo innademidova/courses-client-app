@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Search } from 'react-bootstrap-icons';
 
 import { Button, Input } from '../../../../common';
 import {
@@ -7,14 +8,14 @@ import {
 } from '../../../../common/constants/constants';
 
 const SearchBar = (props) => {
-	const onFormSubmit = (e) => {
+	/* const onFormSubmit = (e) => {
 		e.preventDefault();
 		props.search(value);
-	};
+	}; */
 
 	const [value, setValue] = useState('');
 	return (
-		<form className='searchBar' onSubmit={onFormSubmit}>
+		<div className='searchBar' /* onSubmit={onFormSubmit} */>
 			<Input
 				placeholder={placeholderText.searchBar}
 				onChange={(event) => {
@@ -25,8 +26,12 @@ const SearchBar = (props) => {
 					}
 				}}
 			/>
-			<Button buttonText={buttonText.searchBar} />
-		</form>
+			<Button
+				buttonText={buttonText.searchBar}
+				onClick={() => props.search(value)}
+				icon={<Search />}
+			/>
+		</div>
 	);
 };
 export default SearchBar;

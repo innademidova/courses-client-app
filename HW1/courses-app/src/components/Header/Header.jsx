@@ -4,6 +4,7 @@ import Button from '../../common/Button/Button';
 import { Logo } from './components/Logo/Logo';
 
 import { buttonText } from '../../common/constants/constants';
+import { BoxArrowLeft } from 'react-bootstrap-icons';
 
 const Header = () => {
 	return (
@@ -13,7 +14,7 @@ const Header = () => {
 				<div className='headerUserBlock'>
 					<div className='userName'>Inna Demidova</div>
 					<div className='headerButton'>
-						<Button buttonText={buttonText.logOut} />
+						<Button buttonText={buttonText.logOut} icon={<BoxArrowLeft />} />
 					</div>
 				</div>
 			</div>

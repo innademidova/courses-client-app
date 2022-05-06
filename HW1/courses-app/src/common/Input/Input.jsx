@@ -1,21 +1,18 @@
-import './Input.css';
+import { Form } from 'react-bootstrap';
 
 const Input = (props) => {
+	const { labelText, onChange, ...other } = props;
 	return (
-		<label>
-			{props.labelText}
-			<input
-				className='input'
-				name={props.name}
-				placeholder={props.placeholder}
+		<Form.Group className='mb-3' controlId='exampleForm.ControlInput1'>
+			<Form.Label>{labelText}</Form.Label>
+			<Form.Control
+				{...other}
 				onChange={(event) => {
 					event.target.value = event.target.value.trimStart();
-					props.onChange(event);
+					onChange(event);
 				}}
-				onBlur={props.onBlur}
-				value={props.value}
 			/>
-		</label>
+		</Form.Group>
 	);
 };
 export default Input;
