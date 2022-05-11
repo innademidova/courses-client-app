@@ -1,12 +1,12 @@
 import './Button.css';
 import DefaultButton from 'react-bootstrap/Button';
-import { Icon, Icon123 } from 'react-bootstrap-icons';
+import { Icon } from 'react-bootstrap-icons';
 import React from 'react';
 interface Props {
 	icon?: Icon;
 	buttonText?: string;
 	type?: 'button' | 'submit' | 'reset' | undefined;
-	variant?: 'primary' | 'danger';
+	variant?: 'primary' | 'danger' | 'link' | 'light';
 	onClick?: () => void;
 	disabled?: boolean;
 }

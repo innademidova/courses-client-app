@@ -10,7 +10,6 @@ import { useNavigate } from 'react-router-dom';
 type Props = {
 	authors: Author[];
 	courses: Course[];
-	setIsAddCourse: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const ExistedCourses = (props: Props) => {
@@ -45,7 +44,6 @@ const ExistedCourses = (props: Props) => {
 			<Button
 				buttonText={buttonText.addNewCourse}
 				onClick={() => {
-					props.setIsAddCourse(true);
 					navigate('add');
 				}}
 				icon={PlusLg}

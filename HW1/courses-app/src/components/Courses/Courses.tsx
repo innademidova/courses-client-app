@@ -9,41 +9,26 @@ import CreateCourse from '../CreateCourse/CreateCourse';
 import ExistedCourses from './ExistedCourses';
 
 const Courses = () => {
-	const [isAddCourse, setIsAddCourse] = useState(false);
 	const [authors, setNewAuthor] = useState(mockedAuthorsList);
 	const [courses, setCourses] = useState(mockedCoursesList);
-	if (isAddCourse) {
-		return (
-			<div>
-				<Routes>
-					<Route
-						path='add'
-						element={
-							<CreateCourse
-								authors={authors}
-								setNewAuthor={setNewAuthor}
-								courses={courses}
-								setCourses={setCourses}
-								setIsAddCourse={setIsAddCourse}
-							/>
-						}
-					/>
-				</Routes>
-			</div>
-		);
-	}
 	return (
 		<div>
 			<Routes>
 				<Route
-					path=''
+					path='add'
 					element={
-						<ExistedCourses
+						<CreateCourse
 							authors={authors}
+							setNewAuthor={setNewAuthor}
 							courses={courses}
-							setIsAddCourse={setIsAddCourse}
+							setCourses={setCourses}
 						/>
 					}
+				/>
+
+				<Route
+					path=''
+					element={<ExistedCourses authors={authors} courses={courses} />}
 				/>
 				<Route path=':courseId' element={<CourseInfo courses={courses} />} />
 			</Routes>

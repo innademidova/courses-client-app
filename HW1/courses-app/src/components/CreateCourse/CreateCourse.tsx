@@ -15,14 +15,13 @@ import { AddAuthors, CreateAuthor, Duration } from '.';
 import { Button, Input } from '../../common';
 import { Author } from '../../common/models/author';
 import { Course } from '../../common/models/course';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
 	authors: Author[];
 	setNewAuthor: React.Dispatch<React.SetStateAction<Author[]>>;
 	courses: Course[];
 	setCourses: React.Dispatch<React.SetStateAction<Course[]>>;
-	setIsAddCourse: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const CreateCourse = (props: Props) => {
@@ -154,7 +153,6 @@ const CreateCourse = (props: Props) => {
 						buttonText={buttonText.createCourse}
 						onClick={() => {
 							props.setCourses([...props.courses, newCourse]);
-							props.setIsAddCourse(false);
 							navigate('/courses');
 						}}
 					/>

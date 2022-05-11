@@ -1,5 +1,4 @@
 import { Button } from '../../../common';
-import { buttonText } from '../../../common/constants/constants';
 import { PlusLg, Trash3 } from 'react-bootstrap-icons';
 import { Course } from '../../../common/models/course';
 import { Author } from '../../../common/models/author';
@@ -19,8 +18,8 @@ const AddAuthors = (props: Props) => {
 				.filter((author) => !props.newCourseAuthors.includes(author.id))
 				.map((author) => {
 					return (
-						<div key={author.id}>
-							<label>{author.name}</label>
+						<div className='d-flex' key={author.id}>
+							<label className='align-self-center'>{author.name}</label>
 							<div>
 								<Button
 									onClick={() => {
@@ -29,6 +28,7 @@ const AddAuthors = (props: Props) => {
 											author.id,
 										]);
 									}}
+									variant='link'
 									icon={PlusLg}
 								/>
 							</div>
@@ -40,15 +40,15 @@ const AddAuthors = (props: Props) => {
 				.filter((author) => props.newCourseAuthors.includes(author.id))
 				.map((author) => {
 					return (
-						<div key={author.id}>
-							<label>{author.name}</label>
+						<div className='d-flex' key={author.id}>
+							<label className='align-self-center'>{author.name}</label>
 							<Button
 								onClick={() => {
 									props.setNewCourseAuthors([
 										...props.newCourseAuthors.filter((id) => id !== author.id),
 									]);
 								}}
-								buttonText={buttonText.deleteAuthor}
+								variant='link'
 								icon={Trash3}
 							/>
 						</div>
