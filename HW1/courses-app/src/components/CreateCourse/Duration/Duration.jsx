@@ -24,8 +24,7 @@ const Duration = (props) => {
 				value={inputValue}
 				labelText={labelText.duration}
 				placeholder={placeholderText.duration}
-				onChange={(event) => {
-					const value = event.target.value;
+				onChange={(value) => {
 					setValue(value);
 					if (!isFinite(value)) {
 						props.setDurationError(

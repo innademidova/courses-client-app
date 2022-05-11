@@ -8,7 +8,7 @@ import {
 	labelText,
 	placeholderText,
 } from '../../common/constants/constants';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Registration = () => {
@@ -27,6 +27,7 @@ const Registration = () => {
 			.register(newUser)
 			.then((response) => {
 				if (response.data.successful) {
+					toast('Register successful!');
 					navigate('/login');
 				}
 			})
@@ -37,7 +38,6 @@ const Registration = () => {
 	return (
 		<div>
 			<h3>Registration</h3>
-			<ToastContainer />
 			<Form onSubmit={handleSubmit}>
 				<Input
 					labelText={labelText.name}
@@ -52,6 +52,7 @@ const Registration = () => {
 					value={email}
 				/>
 				<Input
+					type='password'
 					labelText={labelText.password}
 					placeholder={placeholderText.password}
 					onChange={(value) => setInputPassword(value)}

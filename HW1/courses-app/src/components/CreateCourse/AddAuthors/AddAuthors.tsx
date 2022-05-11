@@ -1,7 +1,17 @@
 import { Button } from '../../../common';
 import { buttonText } from '../../../common/constants/constants';
 import { PlusLg, Trash3 } from 'react-bootstrap-icons';
-const AddAuthors = (props) => {
+import { Course } from '../../../common/models/course';
+import { Author } from '../../../common/models/author';
+
+type Props = {
+	newCourse: Course;
+	authors: Author[];
+	newCourseAuthors: string[];
+	setNewCourseAuthors: React.Dispatch<React.SetStateAction<string[]>>;
+};
+
+const AddAuthors = (props: Props) => {
 	return (
 		<div>
 			<h3>Authors</h3>
@@ -19,8 +29,7 @@ const AddAuthors = (props) => {
 											author.id,
 										]);
 									}}
-									buttonText={buttonText.addAuthor}
-									icon={<PlusLg />}
+									icon={PlusLg}
 								/>
 							</div>
 						</div>
@@ -40,7 +49,7 @@ const AddAuthors = (props) => {
 									]);
 								}}
 								buttonText={buttonText.deleteAuthor}
-								icon={<Trash3 />}
+								icon={Trash3}
 							/>
 						</div>
 					);

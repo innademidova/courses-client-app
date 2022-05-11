@@ -1,10 +1,13 @@
 import { Form } from 'react-bootstrap';
 
 interface Props {
-	labelText: string;
+	labelText?: string;
 	placeholder: string;
-	value: string;
+	value?: string;
 	onChange: (value: string) => void;
+	type?: 'password' | 'text' | 'email' | 'submit';
+	onBlur?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+	name?: string;
 }
 
 const Input = (props: Props) => {
@@ -18,6 +21,7 @@ const Input = (props: Props) => {
 					event.target.value = event.target.value.trimStart();
 					onChange(event.target.value);
 				}}
+				onBlur={props.onBlur as any}
 			/>
 		</Form.Group>
 	);

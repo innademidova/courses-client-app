@@ -7,29 +7,27 @@ import {
 	placeholderText,
 } from '../../../../common/constants/constants';
 
-const SearchBar = (props) => {
-	/* const onFormSubmit = (e) => {
-		e.preventDefault();
-		props.search(value);
-	}; */
+type Props = {
+	search: (value: string) => void;
+};
 
+const SearchBar = (props: Props) => {
 	const [value, setValue] = useState('');
 	return (
 		<div className='searchBar' /* onSubmit={onFormSubmit} */>
 			<Input
 				placeholder={placeholderText.searchBar}
-				onChange={(event) => {
-					const currentValue = event.target.value;
-					setValue(currentValue);
-					if (currentValue === '') {
-						props.search(currentValue);
+				onChange={(value) => {
+					setValue(value);
+					if (value === '') {
+						props.search(value);
 					}
 				}}
 			/>
 			<Button
 				buttonText={buttonText.searchBar}
 				onClick={() => props.search(value)}
-				icon={<Search />}
+				icon={Search}
 			/>
 		</div>
 	);

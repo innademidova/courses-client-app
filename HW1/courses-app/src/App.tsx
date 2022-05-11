@@ -5,12 +5,16 @@ import Registration from './components/Registration/Registration';
 import Login from './components/Login/Login';
 import { Col, Container, Row } from 'react-bootstrap';
 import { routes } from './common/constants/routes';
+import { useState } from 'react';
+import { State } from './common/models/state';
 
 function App() {
+	const initialState: State = {};
+	const state = useState<State>(initialState);
 	return (
 		<div>
 			<BrowserRouter>
-				<Header />
+				<Header state={state} />
 				<Container>
 					<Row>
 						<Col>
@@ -18,7 +22,7 @@ function App() {
 								<Route path='/' element={<Navigate to='/courses' />} />
 								<Route path={routes.registration} element={<Registration />} />
 								<Route path={routes.courses + '/*'} element={<Courses />} />
-								<Route path={routes.login} element={<Login />} />
+								<Route path={routes.login} element={<Login state={state} />} />
 							</Routes>
 						</Col>
 					</Row>

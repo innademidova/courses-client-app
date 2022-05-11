@@ -1,24 +1,11 @@
-import { Row } from 'react-bootstrap';
+import { Nav, Row } from 'react-bootstrap';
 import { Col } from 'react-bootstrap';
-import {
-	Button,
-	Card,
-	Container,
-	Form,
-	ListGroup,
-	ListGroupItem,
-	Nav,
-} from 'react-bootstrap';
-
+import { Card, Container, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Backspace } from 'react-bootstrap-icons';
 import { useParams } from 'react-router-dom';
-interface Course {
-	id: string;
-	title: string;
-	description: string;
-	creationDate: string;
-	duration: number;
-	authors: string[];
-}
+import { routes } from '../../common/constants/routes';
+import { convertMinutesToHours } from '../../common/helpers';
+import { Course } from '../../common/models/course';
 interface Props {
 	courses: Course[];
 }
@@ -26,16 +13,21 @@ const CourseInfo = (props: Props) => {
 	const { courseId } = useParams();
 	const course = props.courses.find((course) => course.id === courseId);
 	if (!course) {
-		return <div>'Course not found!';</div>;
+		return <div>'Course not found!'</div>;
 	}
 	return (
 		<Container>
+			<Nav className='mx-auto'>
+				<Nav.Link href={routes.courses}>
+					{<Backspace />} Back to courses
+				</Nav.Link>
+			</Nav>
 			<Row>
 				<Col>
 					<Card style={{ width: '50rem' }} className='mx-auto'>
 						<Card.Img
 							variant='bottom'
-							src='https://itproger.com/img/news/1580823783.jpg'
+							src='https://cdn.lifehacker.ru/wp-content/uploads/2021/10/1471328153_1633512244.jpg'
 						/>
 						<Card.Body>
 							<Card.Title className='text-center'>{course.title}</Card.Title>
@@ -49,7 +41,9 @@ const CourseInfo = (props: Props) => {
 							</ListGroupItem>
 							<ListGroupItem>
 								<b>Duration:</b>
-								<span className='d-inline ms-2'>{course.duration}</span>
+								<span className='d-inline ms-2'>
+									{convertMinutesToHours(course.duration)}
+								</span>
 							</ListGroupItem>
 							<ListGroupItem>
 								<b>Created:</b>
@@ -60,35 +54,6 @@ const CourseInfo = (props: Props) => {
 				</Col>
 			</Row>
 		</Container>
-		/* 	<Container>
-			<Row>
-				<Col>
-					<h1 className='text-center'>{course.title}</h1>
-				</Col>
-			</Row>
-			<Row>
-				<Col>{course.description}</Col>
-				<Col>
-					<div>
-						<b>ID:</b>
-
-						<span className='d-inline ml-2'>{course.id}</span>
-					</div>
-					<div>
-						<b>Duration:</b>
-						<span className='d-inline ms-2'>{course.duration}</span>
-					</div>
-					<div>
-						<b>Created:</b>
-						<span className='d-inline ms-2'>{course.creationDate}</span>
-					</div>
-					<div>
-						<b>Authors:</b>
-						<span className='d-inline ms-2'>{course.authors}</span>
-					</div>
-				</Col>
-			</Row>
-		</Container> */
 	);
 };
 

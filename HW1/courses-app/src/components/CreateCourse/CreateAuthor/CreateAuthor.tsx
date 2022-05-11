@@ -9,7 +9,15 @@ import {
 	placeholderText,
 } from '../../../common/constants/constants';
 
-const CreateAuthor = (props) => {
+type Props = {
+	onBlur: (event: React.ChangeEvent<HTMLInputElement>) => void;
+	createAuthorsError: string;
+	createAuthorsDirty: boolean;
+	setCreateAuthorsError: React.Dispatch<React.SetStateAction<string>>;
+	setAuthors: (name: string) => void;
+};
+
+const CreateAuthor = (props: Props) => {
 	const [inputValue, setValue] = useState('');
 	const [formValid, setFormValid] = useState(false);
 	useEffect(() => {
@@ -28,8 +36,7 @@ const CreateAuthor = (props) => {
 				labelText={labelText.authorName}
 				placeholder={placeholderText.authorName}
 				value={inputValue}
-				onChange={(event) => {
-					const value = event.target.value;
+				onChange={(value) => {
 					setValue(value);
 					if (value.length < 2) {
 						props.setCreateAuthorsError(

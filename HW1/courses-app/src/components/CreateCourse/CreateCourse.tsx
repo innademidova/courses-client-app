@@ -7,18 +7,29 @@ import {
 
 import { v4 as uuidv4 } from 'uuid';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { dateGenerator } from '../../common/helpers';
 
 import { AddAuthors, CreateAuthor, Duration } from '.';
 import { Button, Input } from '../../common';
+import { Author } from '../../common/models/author';
+import { Course } from '../../common/models/course';
+import { Navigate, useNavigate } from 'react-router-dom';
 
-const CreateCourse = (props) => {
-	const setAuthors = (name) => {
+type Props = {
+	authors: Author[];
+	setNewAuthor: React.Dispatch<React.SetStateAction<Author[]>>;
+	courses: Course[];
+	setCourses: React.Dispatch<React.SetStateAction<Course[]>>;
+	setIsAddCourse: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const CreateCourse = (props: Props) => {
+	const setAuthors = (name: string) => {
 		const newAuthor = { id: uuidv4(), name };
 		props.setNewAuthor([...props.authors, newAuthor]);
-		props.allAuthors.push(newAuthor);
+		props.authors.push(newAuthor);
 	};
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
@@ -35,13 +46,13 @@ const CreateCourse = (props) => {
 		'Field cannot be empty!'
 	);
 	const [formValid, setFormValid] = useState(false);
-	const [newCourseAuthors, setNewCourseAuthors] = useState([]);
+	const [newCourseAuthors, setNewCourseAuthors] = useState<string[]>([]);
 	const newCourse = {
 		id: uuidv4(),
 		title,
 		description,
+		duration: 0,
 		creationDate: dateGenerator(),
-		duration: '',
 		authors: newCourseAuthors,
 	};
 	useEffect(() => {
@@ -56,7 +67,7 @@ const CreateCourse = (props) => {
 			setFormValid(true);
 		}
 	}, [titleError, descriptionError, durationError, newCourse.authors.length]);
-	const blurHandler = (e) => {
+	const blurHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
 		switch (e.target.name) {
 			case 'title':
 				setTitleDirty(true);
@@ -74,6 +85,7 @@ const CreateCourse = (props) => {
 				return;
 		}
 	};
+	const navigate = useNavigate();
 	return (
 		<div>
 			{titleDirty && titleError && <div>{titleError}</div>}
@@ -83,9 +95,9 @@ const CreateCourse = (props) => {
 				name={inputName.title}
 				labelText={labelText.title}
 				placeholder={placeholderText.title}
-				onChange={(event) => {
-					setTitle(event.target.value);
-					if (event.target.value.length < 2) {
+				onChange={(value) => {
+					setTitle(value);
+					if (value.length < 2) {
 						setTitleError(
 							'Invalid input. The number of characters must be more than 2.'
 						);
@@ -100,9 +112,9 @@ const CreateCourse = (props) => {
 				name={inputName.description}
 				labelText={labelText.description}
 				placeholder={placeholderText.description}
-				onChange={(event) => {
-					setDescription(event.target.value);
-					if (event.target.value.length < 2) {
+				onChange={(value) => {
+					setDescription(value);
+					if (value.length < 2) {
 						setDescriptionError(
 							'Invalid input. The number of characters must be more than 2.'
 						);
@@ -117,8 +129,6 @@ const CreateCourse = (props) => {
 					createAuthorsError={createAuthorsError}
 					createAuthorsDirty={createAuthorsDirty}
 					setCreateAuthorsError={setCreateAuthorsError}
-					allAuthors={props.allAuthors}
-					authors={props.authors}
 					setAuthors={setAuthors}
 				/>
 				<div className='duration'>
@@ -145,6 +155,7 @@ const CreateCourse = (props) => {
 						onClick={() => {
 							props.setCourses([...props.courses, newCourse]);
 							props.setIsAddCourse(false);
+							navigate('/courses');
 						}}
 					/>
 				</div>

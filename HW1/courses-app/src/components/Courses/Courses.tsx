@@ -14,15 +14,22 @@ const Courses = () => {
 	const [courses, setCourses] = useState(mockedCoursesList);
 	if (isAddCourse) {
 		return (
-			<CreateCourse
-				authors={authors}
-				setNewAuthor={setNewAuthor}
-				allAuthors={mockedAuthorsList}
-				courses={courses}
-				setCourses={setCourses}
-				allCourses={mockedCoursesList}
-				setIsAddCourse={setIsAddCourse}
-			/>
+			<div>
+				<Routes>
+					<Route
+						path='add'
+						element={
+							<CreateCourse
+								authors={authors}
+								setNewAuthor={setNewAuthor}
+								courses={courses}
+								setCourses={setCourses}
+								setIsAddCourse={setIsAddCourse}
+							/>
+						}
+					/>
+				</Routes>
+			</div>
 		);
 	}
 	return (
@@ -33,11 +40,7 @@ const Courses = () => {
 					element={
 						<ExistedCourses
 							authors={authors}
-							setNewAuthor={setNewAuthor}
-							allAuthors={mockedAuthorsList}
 							courses={courses}
-							setCourses={setCourses}
-							allCourses={mockedCoursesList}
 							setIsAddCourse={setIsAddCourse}
 						/>
 					}

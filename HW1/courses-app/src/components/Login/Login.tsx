@@ -8,8 +8,14 @@ import {
 	labelText,
 	placeholderText,
 } from '../../common/constants/constants';
+import { State } from '../../common/models/state';
 
-const Login = () => {
+type Props = {
+	state: [State, React.Dispatch<React.SetStateAction<State>>];
+};
+
+const Login = (props: Props) => {
+	const [state, setState] = props.state;
 	let navigate = useNavigate();
 	const [password, setInputPassword] = useState('');
 	const [email, setInputEmail] = useState('');
@@ -18,6 +24,7 @@ const Login = () => {
 		authAPI.login({ email, password }).then((response) => {
 			const token = response.data.result;
 			localStorage.setItem('access_token', token);
+			setState({ ...state, user: response.data.user });
 			if (response.data.successful) {
 				navigate('/courses');
 			}
@@ -34,6 +41,7 @@ const Login = () => {
 					value={email}
 				/>
 				<Input
+					type='password'
 					labelText={labelText.password}
 					placeholder={placeholderText.password}
 					onChange={(value) => setInputPassword(value)}

@@ -6,7 +6,15 @@ import { Card, Col, Container, Row } from 'react-bootstrap';
 import './CourseCard.css';
 import { useNavigate } from 'react-router-dom';
 
-const CourseCard = (props) => {
+export interface CourseCardInterface {
+	id: string;
+	courseAuthors: string[];
+	title: string;
+	description: string;
+	creationDate: string;
+	duration: number;
+}
+const CourseCard = (props: CourseCardInterface) => {
 	const navigate = useNavigate();
 	const courseId = props.id;
 	return (
