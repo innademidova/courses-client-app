@@ -1,13 +1,9 @@
 import { useState } from 'react';
-import { Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { authAPI } from '../../api/api';
-import { Button, Input } from '../../common';
-import {
-	buttonText,
-	labelText,
-	placeholderText,
-} from '../../common/constants/constants';
+import { labelText, placeholderText } from '../../common/constants/constants';
+import Input from '../../common/Input/Input';
 import { State } from '../../common/models/state';
 
 type Props = {
@@ -48,7 +44,7 @@ const Login = (props: Props) => {
 					value={password}
 				/>
 				<div>
-					<Button type='submit' buttonText={buttonText.login} />
+					<Button type='submit'>Login</Button>
 				</div>
 			</Form>
 			<div>

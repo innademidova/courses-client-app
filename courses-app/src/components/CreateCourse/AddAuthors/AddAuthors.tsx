@@ -1,56 +1,63 @@
-import { Button } from '../../../common';
 import { PlusLg, Trash3 } from 'react-bootstrap-icons';
-import { Course } from '../../../common/models/course';
-import { Author } from '../../../common/models/author';
+import { useSelector } from 'react-redux';
+import {
+	getAuthors,
+	getCoursesAuthors,
+} from '../../../store/authors/selectors';
+import { useDispatch } from 'react-redux';
+import { setCoursesAuthorsAC } from '../../../store/authors/actionCreators';
+import { Button } from 'react-bootstrap';
 
-type Props = {
-	newCourse: Course;
-	authors: Author[];
-	newCourseAuthors: string[];
-	setNewCourseAuthors: React.Dispatch<React.SetStateAction<string[]>>;
-};
+const AddAuthors = () => {
+	const authors = useSelector(getAuthors);
+	const coursesAuthors = useSelector(getCoursesAuthors);
+	const dispatch = useDispatch();
 
-const AddAuthors = (props: Props) => {
 	return (
 		<div>
-			<h3>Authors</h3>
-			{props.authors
-				.filter((author) => !props.newCourseAuthors.includes(author.id))
+			<h4>Authors</h4>
+			{authors
+				.filter((author) => !coursesAuthors.includes(author.id))
 				.map((author) => {
 					return (
 						<div className='d-flex' key={author.id}>
 							<label className='align-self-center'>{author.name}</label>
 							<div>
 								<Button
+									type='button'
 									onClick={() => {
-										props.setNewCourseAuthors([
-											...props.newCourseAuthors,
-											author.id,
-										]);
+										dispatch(
+											setCoursesAuthorsAC([...coursesAuthors, author.id])
+										);
 									}}
 									variant='link'
-									icon={PlusLg}
-								/>
+								>
+									<PlusLg />
+								</Button>
 							</div>
 						</div>
 					);
 				})}
-			<h3>Course Authors</h3>
-			{props.authors
-				.filter((author) => props.newCourseAuthors.includes(author.id))
+			<h4>Course Authors</h4>
+			{authors
+				.filter((author) => coursesAuthors.includes(author.id))
 				.map((author) => {
 					return (
 						<div className='d-flex' key={author.id}>
 							<label className='align-self-center'>{author.name}</label>
 							<Button
+								type='button'
 								onClick={() => {
-									props.setNewCourseAuthors([
-										...props.newCourseAuthors.filter((id) => id !== author.id),
-									]);
+									dispatch(
+										setCoursesAuthorsAC([
+											...coursesAuthors.filter((id) => id !== author.id),
+										])
+									);
 								}}
 								variant='link'
-								icon={Trash3}
-							/>
+							>
+								<Trash3 />
+							</Button>
 						</div>
 					);
 				})}

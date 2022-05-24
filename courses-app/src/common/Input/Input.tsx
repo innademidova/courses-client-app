@@ -18,7 +18,6 @@ const Input = (props: Props) => {
 			<Form.Control
 				{...other}
 				onChange={(event) => {
-					event.target.value = event.target.value.trimStart();
 					onChange(event.target.value);
 				}}
 				onBlur={props.onBlur as any}

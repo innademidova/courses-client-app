@@ -1,10 +1,9 @@
-import { Button } from '../../../../common';
-import { buttonText } from '../../../../common/constants/constants';
 import { convertMinutesToHours } from '../../../../common/helpers/pipeDuration';
-import { Card, Col, Container, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 
 import './CourseCard.css';
 import { useNavigate } from 'react-router-dom';
+import { Eye } from 'react-bootstrap-icons';
 
 export interface CourseCardInterface {
 	id: string;
@@ -33,10 +32,10 @@ const CourseCard = (props: CourseCardInterface) => {
 							<div>Authors: {props.courseAuthors.join(', ')}</div>
 							<div>Created: {props.creationDate}</div>
 							<div className='showCourseButton'>
-								<Button
-									onClick={() => navigate(courseId)}
-									buttonText={buttonText.showCourse}
-								/>
+								<Button onClick={() => navigate(courseId)}>
+									Show course
+									<Eye />
+								</Button>
 							</div>
 						</Col>
 					</Row>

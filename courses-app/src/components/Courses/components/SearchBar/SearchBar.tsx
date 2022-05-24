@@ -1,34 +1,33 @@
 import { useState } from 'react';
+import { Button } from 'react-bootstrap';
 import { Search } from 'react-bootstrap-icons';
+import { useDispatch } from 'react-redux';
 
-import { Button, Input } from '../../../../common';
-import {
-	buttonText,
-	placeholderText,
-} from '../../../../common/constants/constants';
+import { placeholderText } from '../../../../common/constants/constants';
+import Input from '../../../../common/Input/Input';
+import { searchCoursesAC } from '../../../../store/courses/actionCreator';
 
-type Props = {
-	search: (value: string) => void;
-};
-
-const SearchBar = (props: Props) => {
+const SearchBar = () => {
 	const [value, setValue] = useState('');
+	const dispatch = useDispatch();
+	const search = (text: string) => {
+		dispatch(searchCoursesAC(text));
+	};
 	return (
-		<div className='searchBar' /* onSubmit={onFormSubmit} */>
+		<div className='searchBar'>
 			<Input
 				placeholder={placeholderText.searchBar}
 				onChange={(value) => {
 					setValue(value);
 					if (value === '') {
-						props.search(value);
+						search(value);
 					}
 				}}
 			/>
-			<Button
-				buttonText={buttonText.searchBar}
-				onClick={() => props.search(value)}
-				icon={Search}
-			/>
+			<Button onClick={() => search(value)}>
+				Search
+				<Search />
+			</Button>
 		</div>
 	);
 };

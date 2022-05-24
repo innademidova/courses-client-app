@@ -2,23 +2,23 @@ import { Nav, Row } from 'react-bootstrap';
 import { Col } from 'react-bootstrap';
 import { Card, Container, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { Backspace } from 'react-bootstrap-icons';
-import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
 import { routes } from '../../common/constants/routes';
 import { convertMinutesToHours } from '../../common/helpers';
-import { Course } from '../../common/models/course';
-interface Props {
-	courses: Course[];
-}
-const CourseInfo = (props: Props) => {
+import { getCourses } from '../../store/courses/selectors';
+
+const CourseInfo = () => {
+	const courses = useSelector(getCourses);
 	const { courseId } = useParams();
-	const course = props.courses.find((course) => course.id === courseId);
+	const course = courses.find((course) => course.id === courseId);
 	if (!course) {
 		return <div>'Course not found!'</div>;
 	}
 	return (
 		<Container>
 			<Nav className='mx-auto'>
-				<Nav.Link href={routes.courses}>
+				<Nav.Link as={Link} to={routes.courses}>
 					{<Backspace />} Back to courses
 				</Nav.Link>
 			</Nav>

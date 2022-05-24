@@ -1,36 +1,31 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
-import {
-	mockedAuthorsList,
-	mockedCoursesList,
-} from '../../common/data/courses';
+import { authorsAPI, coursesAPI } from '../../api/api';
+import { setAuthorsAC } from '../../store/authors/actionCreators';
+import { setCoursesAC } from '../../store/courses/actionCreator';
 import CourseInfo from '../CourseInfo/CourseInfo';
 import CreateCourse from '../CreateCourse/CreateCourse';
 import ExistedCourses from './ExistedCourses';
 
 const Courses = () => {
-	const [authors, setNewAuthor] = useState(mockedAuthorsList);
-	const [courses, setCourses] = useState(mockedCoursesList);
+	const dispatch = useDispatch();
+	useEffect(() => {
+		coursesAPI.getCourses().then((data) => {
+			dispatch(setCoursesAC(data));
+		});
+		authorsAPI.getAuthors().then((data) => {
+			dispatch(setAuthorsAC(data));
+		});
+	}, [dispatch]);
+
 	return (
 		<div>
 			<Routes>
-				<Route
-					path='add'
-					element={
-						<CreateCourse
-							authors={authors}
-							setNewAuthor={setNewAuthor}
-							courses={courses}
-							setCourses={setCourses}
-						/>
-					}
-				/>
+				<Route path='add' element={<CreateCourse />} />
 
-				<Route
-					path=''
-					element={<ExistedCourses authors={authors} courses={courses} />}
-				/>
-				<Route path=':courseId' element={<CourseInfo courses={courses} />} />
+				<Route path='' element={<ExistedCourses />} />
+				<Route path=':courseId' element={<CourseInfo />} />
 			</Routes>
 		</div>
 	);

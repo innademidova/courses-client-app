@@ -1,5 +1,7 @@
 import axios from 'axios';
+import { CoursesResponse } from '../common/models/coursesResponse';
 import { LoginResponse } from '../common/models/auth';
+import { AuthorsResponse } from '../common/models/authorsResponse';
 import { UsersResponse } from '../common/models/users';
 
 const instance = axios.create({
@@ -27,5 +29,21 @@ export const authAPI = {
 export const usersAPI = {
 	getMe() {
 		return instance.get<UsersResponse>('users/me');
+	},
+};
+
+export const authorsAPI = {
+	getAuthors() {
+		return instance
+			.get<AuthorsResponse>('authors/all')
+			.then((response) => response.data.result);
+	},
+};
+
+export const coursesAPI = {
+	getCourses() {
+		return instance
+			.get<CoursesResponse>('/courses/all')
+			.then((response) => response.data.result);
 	},
 };
