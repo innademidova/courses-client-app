@@ -3,7 +3,7 @@ import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 
 import './CourseCard.css';
 import { useNavigate } from 'react-router-dom';
-import { Eye } from 'react-bootstrap-icons';
+import { Eye, Pencil, Trash3 } from 'react-bootstrap-icons';
 
 export interface CourseCardInterface {
 	id: string;
@@ -31,10 +31,16 @@ const CourseCard = (props: CourseCardInterface) => {
 							<div>Duration: {convertMinutesToHours(props.duration)}</div>
 							<div>Authors: {props.courseAuthors.join(', ')}</div>
 							<div>Created: {props.creationDate}</div>
-							<div className='showCourseButton'>
+							<div className='courseButton'>
 								<Button onClick={() => navigate(courseId)}>
 									Show course
 									<Eye />
+								</Button>
+								<Button>
+									<Pencil />
+								</Button>
+								<Button>
+									<Trash3 />
 								</Button>
 							</div>
 						</Col>

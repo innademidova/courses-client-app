@@ -53,6 +53,7 @@ const CreateCourse = () => {
 				touched,
 				isValid,
 				errors,
+				handleReset,
 			}) => (
 				<Form noValidate onSubmit={handleSubmit}>
 					<Row className='mb-3'>
