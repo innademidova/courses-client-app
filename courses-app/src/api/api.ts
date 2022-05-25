@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { CoursesResponse } from '../common/models/coursesResponse';
-import { LoginResponse } from '../common/models/auth';
+import { LoginResponse } from '../common/models/loginResponse';
 import { AuthorsResponse } from '../common/models/authorsResponse';
-import { UsersResponse } from '../common/models/users';
+import { UserResponse } from '../common/models/userResponse';
 
 const instance = axios.create({
 	baseURL: 'http://localhost:4000/',
@@ -24,11 +24,18 @@ export const authAPI = {
 	login(user: { email: string; password: string }) {
 		return instance.post<LoginResponse>('login', user);
 	},
+	logout(token: string) {
+		return instance.delete('logout', {
+			headers: {
+				Authorization: token,
+			},
+		});
+	},
 };
 
 export const usersAPI = {
 	getMe() {
-		return instance.get<UsersResponse>('users/me');
+		return instance.get<UserResponse>('users/me');
 	},
 };
 

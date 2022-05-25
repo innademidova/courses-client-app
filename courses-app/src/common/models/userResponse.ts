@@ -1,4 +1,4 @@
-export interface UsersResponse {
+export interface UserResponse {
 	successful: boolean;
 	result: Result;
 }

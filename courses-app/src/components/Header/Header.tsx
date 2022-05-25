@@ -2,32 +2,25 @@ import { Logo } from './components/Logo/Logo';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { routes } from '../../common/constants/routes';
-import { usersAPI } from '../../api/api';
-import { useEffect } from 'react';
+import { authAPI } from '../../api/api';
 import { localStorageKeys } from '../../common/constants/localStorage';
-import { State } from '../../common/models/state';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { getCurrentUser } from '../../store/user/selectors';
+import { logoutAC } from '../../store/user/actionCreator';
 
-type Props = {
-	state: [State, React.Dispatch<React.SetStateAction<State>>];
-};
-
-const Header = (props: Props) => {
-	const [state, setState] = props.state;
-	useEffect(() => {
-		usersAPI.getMe().then((response) => {
-			if (response.data.successful) {
-				setState({
-					...state,
-					user: {
-						name: response.data.result.name,
-						email: response.data.result.email,
-					},
-				});
-			}
-		});
-	}, []);
+const Header = () => {
+	const user = useSelector(getCurrentUser);
+	const dispatch = useDispatch();
+	const logout = () => {
+		const token = localStorage.getItem('access_token');
+		if (token) {
+			authAPI.logout(token);
+			dispatch(logoutAC());
+		}
+	};
 	return (
 		<Navbar bg='dark' variant='dark' expand='lg'>
 			<Container>
@@ -43,16 +36,13 @@ const Header = (props: Props) => {
 						</Nav.Link>
 					</Nav>
 					<Nav>
-						{state.user ? (
+						{user.name ? (
 							<Nav>
-								<Nav.Link>{state.user.name}</Nav.Link>
+								<Nav.Link>{user.name}</Nav.Link>
 								<Nav.Link
 									onClick={() => {
+										logout();
 										localStorage.removeItem(localStorageKeys.token);
-										setState({
-											...state,
-											user: undefined,
-										});
 									}}
 								>
 									Logout

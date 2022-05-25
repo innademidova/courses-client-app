@@ -1,5 +1,3 @@
-import { placeholderText } from '../../common/constants/constants';
-
 import { v4 as uuidv4 } from 'uuid';
 
 import { convertMinutesToHours, dateGenerator } from '../../common/helpers';
@@ -56,12 +54,12 @@ const CreateCourse = () => {
 			}) => (
 				<Form noValidate onSubmit={handleSubmit}>
 					<Row className='mb-3'>
-						<Form.Group as={Col} md='4' controlId='validationFormikUsername'>
+						<Form.Group as={Col} md='4' controlId='title'>
 							<Form.Label>Title</Form.Label>
 
 							<Form.Control
 								type='text'
-								placeholder={placeholderText.title}
+								placeholder={FORM_FIELDS.title}
 								name={FORM_FIELDS.title}
 								onBlur={handleBlur}
 								value={values[FORM_FIELDS.title]}
@@ -76,11 +74,11 @@ const CreateCourse = () => {
 						</Form.Group>
 					</Row>
 					<Row className='mb-3'>
-						<Form.Group as={Col} md='6' controlId='validationFormik03'>
+						<Form.Group as={Col} md='6' controlId='description'>
 							<Form.Label>Description</Form.Label>
 							<Form.Control
 								type='text'
-								placeholder={placeholderText.description}
+								placeholder={FORM_FIELDS.description}
 								name={FORM_FIELDS.description}
 								value={values[FORM_FIELDS.description]}
 								onBlur={handleBlur}
@@ -97,12 +95,12 @@ const CreateCourse = () => {
 						</Form.Group>
 					</Row>
 					<Row className='mb-3'>
-						<Form.Group as={Col} md='6' controlId='validationFormik04'>
+						<Form.Group as={Col} md='6' controlId='author'>
 							<h4>Add author</h4>
 							<Form.Label>Add author</Form.Label>
 							<Form.Control
 								type='text'
-								placeholder={placeholderText.authorName}
+								placeholder={FORM_FIELDS.author}
 								name={FORM_FIELDS.author}
 								value={values[FORM_FIELDS.author]}
 								onBlur={handleBlur}
@@ -127,7 +125,7 @@ const CreateCourse = () => {
 						</Form.Group>
 					</Row>
 					<Row className='mb-3'>
-						<Form.Group as={Col} md='6' controlId='validationFormik04'>
+						<Form.Group as={Col} md='6' controlId='duration'>
 							<Form.Label>Duration</Form.Label>
 							<Form.Control
 								type='text'

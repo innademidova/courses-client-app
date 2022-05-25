@@ -1,34 +1,49 @@
-import { useEffect } from 'react';
+import { SearchBar, CourseCard } from '.';
+
+import { PlusLg } from 'react-bootstrap-icons';
+
+import { Outlet, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { getCourses } from '../../store/courses/selectors';
+
+import { getAuthors } from '../../store/authors/selectors';
+import { Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-import { Route, Routes } from 'react-router-dom';
+import { useEffect } from 'react';
 import { authorsAPI, coursesAPI } from '../../api/api';
 import { setAuthorsAC } from '../../store/authors/actionCreators';
 import { setCoursesAC } from '../../store/courses/actionCreator';
-import CourseInfo from '../CourseInfo/CourseInfo';
-import CreateCourse from '../CreateCourse/CreateCourse';
-import ExistedCourses from './ExistedCourses';
 
-const Courses = () => {
-	const dispatch = useDispatch();
-	useEffect(() => {
-		coursesAPI.getCourses().then((data) => {
-			dispatch(setCoursesAC(data));
-		});
-		authorsAPI.getAuthors().then((data) => {
-			dispatch(setAuthorsAC(data));
-		});
-	}, [dispatch]);
+const ExistedCourses = () => {
+	const navigate = useNavigate();
+	const courses = useSelector(getCourses);
+	const coursesAuthors = useSelector(getAuthors);
+
+	const getAuthorsName = (id: string): string => {
+		const author = coursesAuthors.find((author) => author.id === id);
+		return author?.name || '';
+	};
 
 	return (
 		<div>
-			<Routes>
-				<Route path='add' element={<CreateCourse />} />
-
-				<Route path='' element={<ExistedCourses />} />
-				<Route path=':courseId' element={<CourseInfo />} />
-			</Routes>
+			<SearchBar />
+			{courses.map((item) => (
+				<CourseCard
+					key={item.id}
+					courseAuthors={item.authors.map(getAuthorsName)}
+					{...item}
+				/>
+			))}
+			<Button
+				onClick={() => {
+					navigate('add');
+				}}
+			>
+				Add new course
+				<PlusLg />
+			</Button>
 		</div>
 	);
 };
 
-export default Courses;
+export default ExistedCourses;

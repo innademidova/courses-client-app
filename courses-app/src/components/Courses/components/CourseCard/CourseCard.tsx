@@ -31,15 +31,14 @@ const CourseCard = (props: CourseCardInterface) => {
 							<div>Duration: {convertMinutesToHours(props.duration)}</div>
 							<div>Authors: {props.courseAuthors.join(', ')}</div>
 							<div>Created: {props.creationDate}</div>
-							<div className='courseButton'>
-								<Button onClick={() => navigate(courseId)}>
-									Show course
+							<div className='mt-2'>
+								<Button className='me-1' onClick={() => navigate(courseId)}>
 									<Eye />
 								</Button>
-								<Button>
+								<Button className='me-1'>
 									<Pencil />
 								</Button>
-								<Button>
+								<Button className='me-1'>
 									<Trash3 />
 								</Button>
 							</div>

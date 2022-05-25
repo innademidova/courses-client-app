@@ -4,6 +4,7 @@ import { Course } from '../course';
 export interface State {
 	courses: CoursesState;
 	authors: AuthorsState;
+	user: UserState;
 }
 
 export interface CoursesState {
@@ -14,4 +15,11 @@ export interface CoursesState {
 export interface AuthorsState {
 	authors: Author[];
 	coursesAuthors: string[];
+}
+
+export interface UserState {
+	isAuth: boolean;
+	email: string;
+	name: string;
+	token: string;
 }
