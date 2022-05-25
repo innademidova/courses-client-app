@@ -1,164 +1,162 @@
-import {
-	buttonText,
-	inputName,
-	labelText,
-	placeholderText,
-} from '../../common/constants/constants';
-
 import { v4 as uuidv4 } from 'uuid';
 
-import React, { useEffect, useState } from 'react';
+import { convertMinutesToHours, dateGenerator } from '../../common/helpers';
+import { AddAuthors } from '.';
 
-import { dateGenerator } from '../../common/helpers';
-
-import { AddAuthors, CreateAuthor, Duration } from '.';
-import { Button, Input } from '../../common';
-import { Author } from '../../common/models/author';
-import { Course } from '../../common/models/course';
 import { useNavigate } from 'react-router-dom';
+import { Formik, FormikValues } from 'formik';
+import validationSchema from './validation/validation';
+import { FORM_FIELDS, FORM_INITIAL_VALUES } from './constants/constants';
+import { Button, Form, Row } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
+import { createAuthorAC } from '../../store/authors/actionCreators';
+import { useDispatch } from 'react-redux';
+import { addCourseAC } from '../../store/courses/actionCreator';
+import { useSelector } from 'react-redux';
+import { getCoursesAuthors } from '../../store/authors/selectors';
+import { AppDispatch } from '../../store';
+import { routes } from '../../common/constants/routes';
 
-type Props = {
-	authors: Author[];
-	setNewAuthor: React.Dispatch<React.SetStateAction<Author[]>>;
-	courses: Course[];
-	setCourses: React.Dispatch<React.SetStateAction<Course[]>>;
-};
-
-const CreateCourse = (props: Props) => {
-	const setAuthors = (name: string) => {
+const CreateCourse = () => {
+	const dispatch = useDispatch<AppDispatch>();
+	const coursesAuthors = useSelector(getCoursesAuthors);
+	const createNewAuthor = (name: string) => {
 		const newAuthor = { id: uuidv4(), name };
-		props.setNewAuthor([...props.authors, newAuthor]);
-		props.authors.push(newAuthor);
-	};
-	const [title, setTitle] = useState('');
-	const [description, setDescription] = useState('');
-	const [titleDirty, setTitleDirty] = useState(false);
-	const [descriptionDirty, setDescriptionDirty] = useState(false);
-	const [titleError, setTitleError] = useState('Field cannot be empty!');
-	const [durationError, setDurationError] = useState('Field cannot be empty!');
-	const [createAuthorsDirty, setCreateAuthorsDirty] = useState(false);
-	const [createAuthorsError, setCreateAuthorsError] = useState(
-		'Field cannot be empty!'
-	);
-	const [durationDirty, setDurationDirty] = useState(false);
-	const [descriptionError, setDescriptionError] = useState(
-		'Field cannot be empty!'
-	);
-	const [formValid, setFormValid] = useState(false);
-	const [newCourseAuthors, setNewCourseAuthors] = useState<string[]>([]);
-	const newCourse = {
-		id: uuidv4(),
-		title,
-		description,
-		duration: 0,
-		creationDate: dateGenerator(),
-		authors: newCourseAuthors,
-	};
-	useEffect(() => {
-		if (
-			titleError ||
-			descriptionError ||
-			durationError ||
-			newCourse.authors.length < 1
-		) {
-			setFormValid(false);
-		} else {
-			setFormValid(true);
-		}
-	}, [titleError, descriptionError, durationError, newCourse.authors.length]);
-	const blurHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-		switch (e.target.name) {
-			case 'title':
-				setTitleDirty(true);
-				break;
-			case 'description':
-				setDescriptionDirty(true);
-				break;
-			case 'createAuthor':
-				setCreateAuthorsDirty(true);
-				break;
-			case 'duration':
-				setDurationDirty(true);
-				break;
-			default:
-				return;
-		}
+		dispatch(createAuthorAC(newAuthor));
 	};
 	const navigate = useNavigate();
 	return (
-		<div>
-			{titleDirty && titleError && <div>{titleError}</div>}
-			<Input
-				onBlur={(e) => blurHandler(e)}
-				value={title}
-				name={inputName.title}
-				labelText={labelText.title}
-				placeholder={placeholderText.title}
-				onChange={(value) => {
-					setTitle(value);
-					if (value.length < 2) {
-						setTitleError(
-							'Invalid input. The number of characters must be more than 2.'
-						);
-					} else {
-						setTitleError('');
-					}
-				}}
-			/>
-			{descriptionDirty && descriptionError && <div>{descriptionError}</div>}
-			<Input
-				onBlur={(e) => blurHandler(e)}
-				name={inputName.description}
-				labelText={labelText.description}
-				placeholder={placeholderText.description}
-				onChange={(value) => {
-					setDescription(value);
-					if (value.length < 2) {
-						setDescriptionError(
-							'Invalid input. The number of characters must be more than 2.'
-						);
-					} else {
-						setDescriptionError('');
-					}
-				}}
-			/>
-			<div className='authorsBlock'>
-				<CreateAuthor
-					onBlur={blurHandler}
-					createAuthorsError={createAuthorsError}
-					createAuthorsDirty={createAuthorsDirty}
-					setCreateAuthorsError={setCreateAuthorsError}
-					setAuthors={setAuthors}
-				/>
-				<div className='duration'>
-					<Duration
-						onBlur={blurHandler}
-						durationError={durationError}
-						durationDirty={durationDirty}
-						setDurationError={setDurationError}
-						newCourse={newCourse}
-					/>
-				</div>
-				<div className='addAuthors'>
-					<AddAuthors
-						newCourse={newCourse}
-						authors={props.authors}
-						newCourseAuthors={newCourseAuthors}
-						setNewCourseAuthors={setNewCourseAuthors}
-					/>
-				</div>
-				<div>
-					<Button
-						disabled={!formValid}
-						buttonText={buttonText.createCourse}
-						onClick={() => {
-							props.setCourses([...props.courses, newCourse]);
-							navigate('/courses');
-						}}
-					/>
-				</div>
-			</div>
-		</div>
+		<Formik
+			validationSchema={validationSchema}
+			onSubmit={(values: FormikValues) => {
+				const newCourse = {
+					id: uuidv4(),
+					title: values[FORM_FIELDS.title],
+					description: values[FORM_FIELDS.description],
+					duration: values[FORM_FIELDS.duration],
+					creationDate: dateGenerator(),
+					authors: coursesAuthors,
+				};
+
+				dispatch(addCourseAC(newCourse));
+				navigate(routes.courses);
+			}}
+			initialValues={FORM_INITIAL_VALUES}
+		>
+			{({
+				handleSubmit,
+				handleChange,
+				handleBlur,
+				values,
+				touched,
+				isValid,
+				errors,
+			}) => (
+				<Form noValidate onSubmit={handleSubmit}>
+					<Row className='mb-3'>
+						<Form.Group as={Col} md='4' controlId='title'>
+							<Form.Label>Title</Form.Label>
+
+							<Form.Control
+								type='text'
+								placeholder={FORM_FIELDS.title}
+								name={FORM_FIELDS.title}
+								onBlur={handleBlur}
+								value={values[FORM_FIELDS.title]}
+								onChange={handleChange}
+								isInvalid={
+									touched[FORM_FIELDS.title] && !!errors[FORM_FIELDS.title]
+								}
+							/>
+							<Form.Control.Feedback type='invalid'>
+								{errors[FORM_FIELDS.title]}
+							</Form.Control.Feedback>
+						</Form.Group>
+					</Row>
+					<Row className='mb-3'>
+						<Form.Group as={Col} md='6' controlId='description'>
+							<Form.Label>Description</Form.Label>
+							<Form.Control
+								type='text'
+								placeholder={FORM_FIELDS.description}
+								name={FORM_FIELDS.description}
+								value={values[FORM_FIELDS.description]}
+								onBlur={handleBlur}
+								onChange={handleChange}
+								isInvalid={
+									touched[FORM_FIELDS.description] &&
+									!!errors[FORM_FIELDS.description]
+								}
+							/>
+
+							<Form.Control.Feedback type='invalid'>
+								{errors[FORM_FIELDS.description]}
+							</Form.Control.Feedback>
+						</Form.Group>
+					</Row>
+					<Row className='mb-3'>
+						<Form.Group as={Col} md='6' controlId='author'>
+							<h4>Add author</h4>
+							<Form.Label>Add author</Form.Label>
+							<Form.Control
+								type='text'
+								placeholder={FORM_FIELDS.author}
+								name={FORM_FIELDS.author}
+								value={values[FORM_FIELDS.author]}
+								onBlur={handleBlur}
+								onChange={handleChange}
+								isInvalid={
+									touched[FORM_FIELDS.author] && !!errors[FORM_FIELDS.author]
+								}
+							/>
+
+							<Form.Control.Feedback type='invalid'>
+								{errors[FORM_FIELDS.author]}
+							</Form.Control.Feedback>
+
+							<Button
+								type='button'
+								onClick={() => {
+									createNewAuthor(values[FORM_FIELDS.author]);
+								}}
+							>
+								Create author{' '}
+							</Button>
+						</Form.Group>
+					</Row>
+					<Row className='mb-3'>
+						<Form.Group as={Col} md='6' controlId='duration'>
+							<Form.Label>Duration</Form.Label>
+							<Form.Control
+								type='text'
+								placeholder={FORM_FIELDS.duration}
+								name={FORM_FIELDS.duration}
+								value={values[FORM_FIELDS.duration]}
+								onBlur={handleBlur}
+								onChange={handleChange}
+								isInvalid={
+									touched[FORM_FIELDS.duration] &&
+									!!errors[FORM_FIELDS.duration]
+								}
+							/>
+
+							<Form.Control.Feedback type='invalid'>
+								{errors[FORM_FIELDS.duration]}
+							</Form.Control.Feedback>
+							<h4>
+								Duration:
+								{convertMinutesToHours(Number(values[FORM_FIELDS.duration]))}
+							</h4>
+						</Form.Group>
+					</Row>
+
+					<AddAuthors />
+					<Button type='submit' disabled={!isValid || !coursesAuthors.length}>
+						Create course
+					</Button>
+				</Form>
+			)}
+		</Formik>
 	);
 };
 

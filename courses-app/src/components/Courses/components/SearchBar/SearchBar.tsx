@@ -1,35 +1,37 @@
 import { useState } from 'react';
+import { Button, FormControl, InputGroup } from 'react-bootstrap';
 import { Search } from 'react-bootstrap-icons';
+import { useDispatch } from 'react-redux';
+import { searchCoursesAC } from '../../../../store/courses/actionCreator';
 
-import { Button, Input } from '../../../../common';
-import {
-	buttonText,
-	placeholderText,
-} from '../../../../common/constants/constants';
-
-type Props = {
-	search: (value: string) => void;
-};
-
-const SearchBar = (props: Props) => {
-	const [value, setValue] = useState('');
+const SearchBar = () => {
+	const [searchValue, setSearchValue] = useState('');
+	const dispatch = useDispatch();
+	const search = (text: string) => {
+		dispatch(searchCoursesAC(text));
+	};
 	return (
-		<div className='searchBar' /* onSubmit={onFormSubmit} */>
-			<Input
-				placeholder={placeholderText.searchBar}
-				onChange={(value) => {
-					setValue(value);
+		<InputGroup className='my-3'>
+			<FormControl
+				placeholder='Search'
+				aria-label='search'
+				aria-describedby='search2'
+				onChange={(event) => {
+					const value = event.target.value;
+					setSearchValue(value);
 					if (value === '') {
-						props.search(value);
+						search(value);
 					}
 				}}
 			/>
 			<Button
-				buttonText={buttonText.searchBar}
-				onClick={() => props.search(value)}
-				icon={Search}
-			/>
-		</div>
+				onClick={() => search(searchValue)}
+				variant='outline-primary'
+				id='search2'
+			>
+				<Search />
+			</Button>
+		</InputGroup>
 	);
 };
 export default SearchBar;

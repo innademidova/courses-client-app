@@ -1,6 +1,8 @@
 import axios from 'axios';
-import { LoginResponse } from '../common/models/auth';
-import { UsersResponse } from '../common/models/users';
+import { CoursesResponse } from '../common/models/coursesResponse';
+import { LoginResponse } from '../common/models/loginResponse';
+import { AuthorsResponse } from '../common/models/authorsResponse';
+import { UserResponse } from '../common/models/userResponse';
 
 const instance = axios.create({
 	baseURL: 'http://localhost:4000/',
@@ -22,10 +24,33 @@ export const authAPI = {
 	login(user: { email: string; password: string }) {
 		return instance.post<LoginResponse>('login', user);
 	},
+	logout(token: string) {
+		return instance.delete('logout', {
+			headers: {
+				Authorization: token,
+			},
+		});
+	},
 };
 
 export const usersAPI = {
 	getMe() {
-		return instance.get<UsersResponse>('users/me');
+		return instance.get<UserResponse>('users/me');
+	},
+};
+
+export const authorsAPI = {
+	getAuthors() {
+		return instance
+			.get<AuthorsResponse>('authors/all')
+			.then((response) => response.data.result);
+	},
+};
+
+export const coursesAPI = {
+	getCourses() {
+		return instance
+			.get<CoursesResponse>('/courses/all')
+			.then((response) => response.data.result);
 	},
 };

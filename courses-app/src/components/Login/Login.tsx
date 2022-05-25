@@ -1,61 +1,100 @@
-import { useState } from 'react';
-import { Form } from 'react-bootstrap';
+import { Formik } from 'formik';
+
+import { Button, Col, Form, Row } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { authAPI } from '../../api/api';
-import { Button, Input } from '../../common';
-import {
-	buttonText,
-	labelText,
-	placeholderText,
-} from '../../common/constants/constants';
-import { State } from '../../common/models/state';
 
-type Props = {
-	state: [State, React.Dispatch<React.SetStateAction<State>>];
-};
+import { routes } from '../../common/constants/routes';
 
-const Login = (props: Props) => {
-	const [state, setState] = props.state;
-	let navigate = useNavigate();
-	const [password, setInputPassword] = useState('');
-	const [email, setInputEmail] = useState('');
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		authAPI.login({ email, password }).then((response) => {
-			const token = response.data.result;
-			localStorage.setItem('access_token', token);
-			setState({ ...state, user: response.data.user });
-			if (response.data.successful) {
-				navigate('/courses');
-			}
-		});
-	};
+import { loginAC } from '../../store/user/actionCreator';
+import { FORM_FIELDS, FORM_INITIAL_VALUES } from './constants/constants';
+import validationSchema from './validation/validation';
+
+const Login = () => {
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	return (
-		<div>
+		<>
 			<h3>Login</h3>
-			<Form onSubmit={handleSubmit}>
-				<Input
-					labelText={labelText.email}
-					placeholder={placeholderText.email}
-					onChange={(value) => setInputEmail(value)}
-					value={email}
-				/>
-				<Input
-					type='password'
-					labelText={labelText.password}
-					placeholder={placeholderText.password}
-					onChange={(value) => setInputPassword(value)}
-					value={password}
-				/>
-				<div>
-					<Button type='submit' buttonText={buttonText.login} />
-				</div>
-			</Form>
+			<Formik
+				validationSchema={validationSchema}
+				onSubmit={(values) => {
+					const email = values[FORM_FIELDS.email];
+					const password = values[FORM_FIELDS.password];
+					authAPI.login({ email, password }).then((response) => {
+						const token = response.data.result;
+						const user = response.data.user;
+						localStorage.setItem('access_token', token);
+						dispatch(loginAC(user, token));
+						if (response.data.successful) {
+							navigate(routes.courses);
+						}
+					});
+				}}
+				initialValues={FORM_INITIAL_VALUES}
+			>
+				{({
+					handleSubmit,
+					handleChange,
+					handleBlur,
+					values,
+					touched,
+					isValid,
+					errors,
+				}) => (
+					<Form noValidate onSubmit={handleSubmit}>
+						<Row className='mb-3'>
+							<Form.Group as={Col} md='6' controlId='email'>
+								<Form.Label>Email</Form.Label>
+								<Form.Control
+									type='text'
+									placeholder={FORM_FIELDS.email}
+									name={FORM_FIELDS.email}
+									onBlur={handleBlur}
+									value={values[FORM_FIELDS.email]}
+									onChange={handleChange}
+									isInvalid={
+										touched[FORM_FIELDS.email] && !!errors[FORM_FIELDS.email]
+									}
+								/>
+								<Form.Control.Feedback type='invalid'>
+									{errors[FORM_FIELDS.email]}
+								</Form.Control.Feedback>
+							</Form.Group>
+						</Row>
+						<Row className='mb-3'>
+							<Form.Group as={Col} md='6' controlId='password'>
+								<Form.Label>Password</Form.Label>
+								<Form.Control
+									type='text'
+									placeholder={FORM_FIELDS.password}
+									name={FORM_FIELDS.password}
+									value={values[FORM_FIELDS.password]}
+									onBlur={handleBlur}
+									onChange={handleChange}
+									isInvalid={
+										touched[FORM_FIELDS.password] &&
+										!!errors[FORM_FIELDS.password]
+									}
+								/>
+
+								<Form.Control.Feedback type='invalid'>
+									{errors[FORM_FIELDS.password]}
+								</Form.Control.Feedback>
+							</Form.Group>
+						</Row>
+						<Button type='submit' disabled={!isValid}>
+							Login
+						</Button>
+					</Form>
+				)}
+			</Formik>
 			<div>
-				If you have an account you can
+				If you don't have an account you can
 				<Link to='/registration'> Registration</Link>
 			</div>
-		</div>
+		</>
 	);
 };
 export default Login;

@@ -1,39 +1,49 @@
-import { useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import {
-	mockedAuthorsList,
-	mockedCoursesList,
-} from '../../common/data/courses';
-import CourseInfo from '../CourseInfo/CourseInfo';
-import CreateCourse from '../CreateCourse/CreateCourse';
-import ExistedCourses from './ExistedCourses';
+import { SearchBar, CourseCard } from '.';
 
-const Courses = () => {
-	const [authors, setNewAuthor] = useState(mockedAuthorsList);
-	const [courses, setCourses] = useState(mockedCoursesList);
+import { PlusLg } from 'react-bootstrap-icons';
+
+import { Outlet, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { getCourses } from '../../store/courses/selectors';
+
+import { getAuthors } from '../../store/authors/selectors';
+import { Button } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { authorsAPI, coursesAPI } from '../../api/api';
+import { setAuthorsAC } from '../../store/authors/actionCreators';
+import { setCoursesAC } from '../../store/courses/actionCreator';
+
+const ExistedCourses = () => {
+	const navigate = useNavigate();
+	const courses = useSelector(getCourses);
+	const coursesAuthors = useSelector(getAuthors);
+
+	const getAuthorsName = (id: string): string => {
+		const author = coursesAuthors.find((author) => author.id === id);
+		return author?.name || '';
+	};
+
 	return (
 		<div>
-			<Routes>
-				<Route
-					path='add'
-					element={
-						<CreateCourse
-							authors={authors}
-							setNewAuthor={setNewAuthor}
-							courses={courses}
-							setCourses={setCourses}
-						/>
-					}
+			<SearchBar />
+			{courses.map((item) => (
+				<CourseCard
+					key={item.id}
+					courseAuthors={item.authors.map(getAuthorsName)}
+					{...item}
 				/>
-
-				<Route
-					path=''
-					element={<ExistedCourses authors={authors} courses={courses} />}
-				/>
-				<Route path=':courseId' element={<CourseInfo courses={courses} />} />
-			</Routes>
+			))}
+			<Button
+				onClick={() => {
+					navigate('add');
+				}}
+			>
+				Add new course
+				<PlusLg />
+			</Button>
 		</div>
 	);
 };
 
-export default Courses;
+export default ExistedCourses;

@@ -1,0 +1,3 @@
+export const SET_COURSES = 'SET_COURSES';
+export const SEARCH_COURSES = 'SEARCH_COURSES';
+export const ADD_NEW_COURSE = 'ADD_NEW_COURSE';
