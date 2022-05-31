@@ -1,14 +1,14 @@
 import { Course, CoursesForm } from '../../common/models/course';
 import { SEARCH_COURSES, SET_COURSES, ADD_NEW_COURSE } from './actionTypes';
-export interface CoursesAction {
+interface CoursesAction {
 	type: string;
 	courses: Course[];
-	course: CoursesForm;
+	course: Course;
 	inputValue: string;
 }
 
 const initialState = {
-	courses: [],
+	courses: [] as Course[],
 	search: '',
 };
 

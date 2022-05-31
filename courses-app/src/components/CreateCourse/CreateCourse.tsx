@@ -16,6 +16,7 @@ import { useSelector } from 'react-redux';
 import { getCoursesAuthors } from '../../store/authors/selectors';
 import { AppDispatch } from '../../store';
 import { routes } from '../../common/constants/routes';
+import { addNewCourse } from '../../store/courses/thunk';
 
 const CreateCourse = () => {
 	const dispatch = useDispatch<AppDispatch>();
@@ -30,15 +31,13 @@ const CreateCourse = () => {
 			validationSchema={validationSchema}
 			onSubmit={(values: FormikValues) => {
 				const newCourse = {
-					id: uuidv4(),
 					title: values[FORM_FIELDS.title],
 					description: values[FORM_FIELDS.description],
-					duration: values[FORM_FIELDS.duration],
-					creationDate: dateGenerator(),
+					duration: +values[FORM_FIELDS.duration],
 					authors: coursesAuthors,
 				};
 
-				dispatch(addCourseAC(newCourse));
+				dispatch(addNewCourse(newCourse));
 				navigate(routes.courses);
 			}}
 			initialValues={FORM_INITIAL_VALUES}

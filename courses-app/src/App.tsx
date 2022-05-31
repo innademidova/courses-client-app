@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from './hooks';
 import getMe from './store/user/thunk';
 import { getCurrentUser } from './store/user/selectors';
 import { toggleIsFetching } from './store/user/actionCreator';
+import { getCourses } from './store/courses/thunk';
 
 function App() {
 	const token = localStorage.getItem('access_token');
@@ -28,9 +29,7 @@ function App() {
 		} else {
 			dispatch(toggleIsFetching(false));
 		}
-		coursesAPI.getCourses().then((data) => {
-			dispatch(setCoursesAC(data));
-		});
+		dispatch(getCourses());
 		authorsAPI.getAuthors().then((data) => {
 			dispatch(setAuthorsAC(data));
 		});

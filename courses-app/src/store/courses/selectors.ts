@@ -6,7 +6,7 @@ export const getCourses = (state: State) => {
 	return state.courses.courses.filter((course: Course) => {
 		return (
 			course.title.toLowerCase().includes(valueToLowerCase) ||
-			course.id.toLowerCase().includes(valueToLowerCase)
+			course.id.includes(valueToLowerCase)
 		);
 	});
 };

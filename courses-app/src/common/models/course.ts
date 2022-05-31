@@ -10,7 +10,6 @@ export interface Course {
 export interface CoursesForm {
 	title: string;
 	description: string;
-	creationDate: string;
 	duration: number;
 	authors: string[];
 }

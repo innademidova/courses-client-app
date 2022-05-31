@@ -1,4 +1,4 @@
-import { Course, CoursesForm } from './../../common/models/course';
+import { Course } from './../../common/models/course';
 import { SEARCH_COURSES, SET_COURSES, ADD_NEW_COURSE } from './actionTypes';
 
 export const setCoursesAC = (courses: Course[]) => ({
@@ -11,7 +11,7 @@ export const searchCoursesAC = (inputValue: string) => ({
 	inputValue,
 });
 
-export const addCourseAC = (course: CoursesForm) => ({
+export const addCourseAC = (course: Course) => ({
 	type: ADD_NEW_COURSE,
 	course,
 });

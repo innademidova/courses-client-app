@@ -1,9 +1,9 @@
-import { CoursesForm } from './../common/models/course';
+import { ApiResponse } from './../common/models/apiResponse';
+import { Course, CoursesForm } from './../common/models/course';
 import axios from 'axios';
-import { CoursesResponse } from '../common/models/coursesResponse';
 import { LoginResponse } from '../common/models/loginResponse';
-import { AuthorsResponse } from '../common/models/authorsResponse';
 import { UserResponse } from '../common/models/userResponse';
+import { Author } from '../common/models/author';
 
 const instance = axios.create({
 	baseURL: 'http://localhost:4000/',
@@ -39,7 +39,7 @@ export const usersAPI = {
 export const authorsAPI = {
 	getAuthors() {
 		return instance
-			.get<AuthorsResponse>('authors/all')
+			.get<ApiResponse<Author[]>>('authors/all')
 			.then((response) => response.data.result);
 	},
 };
@@ -47,13 +47,28 @@ export const authorsAPI = {
 export const coursesAPI = {
 	getCourses() {
 		return instance
-			.get<CoursesResponse>('/courses/all')
+			.get<ApiResponse<Course[]>>('/courses/all')
 			.then((response) => response.data.result);
 	},
+	getFilteredCourses(
+		title: string,
+		description: string,
+		creationDate: string,
+		duration: number
+	) {
+		return instance.get('/courses/filter', {
+			params: {
+				title,
+				description,
+				creationDate,
+				duration,
+			},
+		});
+	},
 	addCourse(course: CoursesForm) {
-		return instance.post('/courses/add', course);
+		return instance.post<ApiResponse<Course>>('/courses/add', course);
 	},
 	editCourse(id: string) {
-		return instance.put(`/courses/${id}`, id);
+		return instance.put<ApiResponse<Course>>(`/courses/${id}`, id);
 	},
 };
