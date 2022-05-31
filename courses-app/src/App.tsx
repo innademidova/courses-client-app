@@ -7,8 +7,7 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { routes } from './common/constants/routes';
 import { useEffect } from 'react';
 
-import { authorsAPI, coursesAPI } from './api/api';
-import { setCoursesAC } from './store/courses/actionCreator';
+import { authorsAPI } from './api/api';
 import { setAuthorsAC } from './store/authors/actionCreators';
 import CreateCourse from './components/CreateCourse/CreateCourse';
 import Courses from './components/Courses/Courses';
