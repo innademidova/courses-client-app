@@ -18,8 +18,10 @@ export interface AuthorsState {
 }
 
 export interface UserState {
+	isFetching: boolean;
 	isAuth: boolean;
 	email: string;
 	name: string;
 	token: string;
+	role: string;
 }

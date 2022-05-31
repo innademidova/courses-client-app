@@ -15,11 +15,9 @@ const Header = () => {
 	const user = useSelector(getCurrentUser);
 	const dispatch = useDispatch();
 	const logout = () => {
-		const token = localStorage.getItem('access_token');
-		if (token) {
-			authAPI.logout(token);
-			dispatch(logoutAC());
-		}
+		authAPI.logout();
+		dispatch(logoutAC());
+		localStorage.removeItem(localStorageKeys.token);
 	};
 	return (
 		<Navbar bg='dark' variant='dark' expand='lg'>
@@ -42,13 +40,12 @@ const Header = () => {
 								<Nav.Link
 									onClick={() => {
 										logout();
-										localStorage.removeItem(localStorageKeys.token);
 									}}
 								>
 									Logout
 								</Nav.Link>
 							</Nav>
-						) : (
+						) : !user.isFetching ? (
 							<Nav>
 								<Nav.Link as={Link} to={routes.login}>
 									Login
@@ -57,6 +54,8 @@ const Header = () => {
 									Register
 								</Nav.Link>
 							</Nav>
+						) : (
+							<></>
 						)}
 					</Nav>
 				</Navbar.Collapse>

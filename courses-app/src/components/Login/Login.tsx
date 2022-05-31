@@ -1,19 +1,21 @@
 import { Formik } from 'formik';
 
 import { Button, Col, Form, Row } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+
 import { Link, useNavigate } from 'react-router-dom';
 import { authAPI } from '../../api/api';
 
 import { routes } from '../../common/constants/routes';
+import { useAppDispatch } from '../../hooks';
 
 import { loginAC } from '../../store/user/actionCreator';
+
 import { FORM_FIELDS, FORM_INITIAL_VALUES } from './constants/constants';
 import validationSchema from './validation/validation';
 
 const Login = () => {
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 	return (
 		<>
 			<h3>Login</h3>

@@ -1,3 +1,4 @@
+import { CoursesForm } from './../common/models/course';
 import axios from 'axios';
 import { CoursesResponse } from '../common/models/coursesResponse';
 import { LoginResponse } from '../common/models/loginResponse';
@@ -24,12 +25,8 @@ export const authAPI = {
 	login(user: { email: string; password: string }) {
 		return instance.post<LoginResponse>('login', user);
 	},
-	logout(token: string) {
-		return instance.delete('logout', {
-			headers: {
-				Authorization: token,
-			},
-		});
+	logout() {
+		return instance.delete('logout');
 	},
 };
 
@@ -52,5 +49,11 @@ export const coursesAPI = {
 		return instance
 			.get<CoursesResponse>('/courses/all')
 			.then((response) => response.data.result);
+	},
+	addCourse(course: CoursesForm) {
+		return instance.post('/courses/add', course);
+	},
+	editCourse(id: string) {
+		return instance.put(`/courses/${id}`, id);
 	},
 };

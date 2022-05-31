@@ -1,9 +1,9 @@
 export interface UserResponse {
 	successful: boolean;
-	result: Result;
+	result: UserInfo;
 }
 
-export interface Result {
+export interface UserInfo {
 	name: string;
 	email: string;
 	password: string;
