@@ -2,18 +2,35 @@ import { Nav, Row } from 'react-bootstrap';
 import { Col } from 'react-bootstrap';
 import { Card, Container, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { Backspace } from 'react-bootstrap-icons';
-import { useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { routes } from '../../common/constants/routes';
 import { convertMinutesToHours } from '../../common/helpers';
-import { getCourses } from '../../store/courses/selectors';
+import { useEffect } from 'react';
+
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import {
+	getCoursesState,
+	getCurrentCourse,
+} from '../../store/courses/selectors';
+import { getCourse } from '../../store/courses/thunk';
+import Preloader from '../../common/Preloader/Preloader';
 
 const CourseInfo = () => {
-	const courses = useSelector(getCourses);
 	const { courseId } = useParams();
-	const course = courses.find((course) => course.id === courseId);
+	const { isFetching } = useAppSelector(getCoursesState);
+	const course = useAppSelector(getCurrentCourse);
+	const dispatch = useAppDispatch();
+	useEffect(() => {
+		if (courseId) {
+			dispatch(getCourse(courseId));
+		}
+	}, [dispatch, courseId]);
+
+	if (isFetching) {
+		return <Preloader />;
+	}
 	if (!course) {
-		return <div>'Course not found!'</div>;
+		return <Navigate to='/404' />;
 	}
 	return (
 		<Container>

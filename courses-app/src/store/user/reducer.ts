@@ -1,6 +1,7 @@
 import { GET_ME, LOGIN, LOGOUT, TOGGLE_IS_FETCHING } from './actionTypes';
 import { User } from '../../common/models/loginResponse';
 import { UserInfo } from '../../common/models/userResponse';
+import { UserState } from '../../common/models/state/state';
 
 interface userAction {
 	type: string;
@@ -10,7 +11,7 @@ interface userAction {
 	isFetching: boolean;
 }
 
-const initialState = {
+const initialState: UserState = {
 	isFetching: true,
 	isAuth: false,
 	email: '',

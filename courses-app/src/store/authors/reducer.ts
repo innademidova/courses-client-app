@@ -1,5 +1,6 @@
 import { Author } from '../../common/models/author';
 import { CREATE_AUTHOR, SET_AUTHORS, SET_COURSES_AUTHORS } from './actionTypes';
+import { AuthorsState } from '../../common/models/state/state';
 
 interface AuthorsAction {
 	type: string;
@@ -7,7 +8,7 @@ interface AuthorsAction {
 	author: Author;
 }
 
-const initialState = {
+const initialState: AuthorsState = {
 	authors: [],
 	coursesAuthors: [],
 };

@@ -7,12 +7,13 @@ import { localStorageKeys } from '../../common/constants/localStorage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+
 import { getCurrentUser } from '../../store/user/selectors';
 import { logoutAC } from '../../store/user/actionCreator';
+import { useAppSelector } from '../../hooks';
 
 const Header = () => {
-	const user = useSelector(getCurrentUser);
+	const user = useAppSelector(getCurrentUser);
 	const dispatch = useDispatch();
 	const logout = () => {
 		authAPI.logout();

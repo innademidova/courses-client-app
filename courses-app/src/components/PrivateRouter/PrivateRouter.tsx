@@ -8,11 +8,7 @@ const PrivateRoute = ({ children }: any) => {
 	const { role, isFetching } = useAppSelector(getCurrentUser);
 	const isAdmin = role === 'admin';
 	if (isFetching) {
-		return (
-			<div>
-				<Preloader />
-			</div>
-		);
+		return <Preloader />;
 	}
 	return isAdmin ? children : <Navigate to={routes.courses} />;
 };

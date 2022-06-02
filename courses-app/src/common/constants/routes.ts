@@ -3,4 +3,5 @@ export const routes = {
 	login: '/login',
 	registration: '/registration',
 	add: '/add',
+	update: '/update/:courseId',
 };

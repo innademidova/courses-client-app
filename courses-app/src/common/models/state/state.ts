@@ -8,7 +8,9 @@ export interface State {
 }
 
 export interface CoursesState {
+	isFetching: boolean;
 	courses: Course[];
+	course: Course | undefined;
 	search: string;
 }
 

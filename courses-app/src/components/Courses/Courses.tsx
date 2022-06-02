@@ -3,16 +3,17 @@ import { SearchBar, CourseCard } from '.';
 import { PlusLg } from 'react-bootstrap-icons';
 
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+
 import { getCourses } from '../../store/courses/selectors';
 
 import { getAuthors } from '../../store/authors/selectors';
 import { Button } from 'react-bootstrap';
+import { useAppSelector } from '../../hooks';
 
-const ExistedCourses = () => {
+const Courses = () => {
 	const navigate = useNavigate();
-	const courses = useSelector(getCourses);
-	const coursesAuthors = useSelector(getAuthors);
+	const courses = useAppSelector(getCourses);
+	const coursesAuthors = useAppSelector(getAuthors);
 
 	const getAuthorsName = (id: string): string => {
 		const author = coursesAuthors.find((author) => author.id === id);
@@ -41,4 +42,4 @@ const ExistedCourses = () => {
 	);
 };
 
-export default ExistedCourses;
+export default Courses;

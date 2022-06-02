@@ -4,6 +4,7 @@ import axios from 'axios';
 import { LoginResponse } from '../common/models/loginResponse';
 import { UserResponse } from '../common/models/userResponse';
 import { Author } from '../common/models/author';
+import { AuthorForm } from '../components/CourseForm/constants/constants';
 
 const instance = axios.create({
 	baseURL: 'http://localhost:4000/',
@@ -37,18 +38,21 @@ export const usersAPI = {
 };
 
 export const authorsAPI = {
-	getAuthors() {
-		return instance
-			.get<ApiResponse<Author[]>>('authors/all')
-			.then((response) => response.data.result);
+	async getAuthors() {
+		const response = await instance.get<ApiResponse<Author[]>>('authors/all');
+		return response.data.result;
+	},
+	addAuthor(author: AuthorForm) {
+		return instance.post<ApiResponse<Author>>('/authors/add', {
+			name: author.name,
+		});
 	},
 };
 
 export const coursesAPI = {
-	getCourses() {
-		return instance
-			.get<ApiResponse<Course[]>>('/courses/all')
-			.then((response) => response.data.result);
+	async getCourses() {
+		const response = await instance.get<ApiResponse<Course[]>>('/courses/all');
+		return response.data.result;
 	},
 	getFilteredCourses(
 		title: string,
@@ -65,10 +69,17 @@ export const coursesAPI = {
 			},
 		});
 	},
+	async getCourse(id: string) {
+		const response = await instance.get<ApiResponse<Course>>(`/courses/${id}`);
+		return response.data.result;
+	},
 	addCourse(course: CoursesForm) {
 		return instance.post<ApiResponse<Course>>('/courses/add', course);
 	},
-	editCourse(id: string) {
-		return instance.put<ApiResponse<Course>>(`/courses/${id}`, id);
+	updateCourse(id: string, course: CoursesForm) {
+		return instance.put<ApiResponse<Course>>(`/courses/${id}`, course);
+	},
+	deleteCourse(id: string) {
+		return instance.delete<ApiResponse<string>>(`/courses/${id}`);
 	},
 };

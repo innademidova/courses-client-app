@@ -8,11 +8,11 @@ const getMe = () => async (dispatch: AppDispatch) => {
 		new Promise((resolve) => {
 			setTimeout(resolve, ms);
 		});
-	await delay(3000);
+	await delay(2000);
 
 	const data = await usersAPI.getMe();
-	dispatch(getMeAC(data.data.result));
 	dispatch(toggleIsFetching(false));
+	dispatch(getMeAC(data.data.result));
 };
 
 export default getMe;
