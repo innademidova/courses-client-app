@@ -1,16 +1,18 @@
-export interface Course {
-	title: string;
-	description: string;
+export interface Course extends CoursesForm {
 	creationDate: string;
-	duration: number;
-	authors: string[];
 	id: string;
 }
 
 export interface CoursesForm {
 	title: string;
 	description: string;
-	creationDate: string;
 	duration: number;
 	authors: string[];
+}
+
+export interface RawCoursesForm {
+	title: string;
+	description: string;
+	duration: string;
+	author: string;
 }

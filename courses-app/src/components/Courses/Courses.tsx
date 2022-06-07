@@ -2,23 +2,20 @@ import { SearchBar, CourseCard } from '.';
 
 import { PlusLg } from 'react-bootstrap-icons';
 
-import { Outlet, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
 import { getCourses } from '../../store/courses/selectors';
 
 import { getAuthors } from '../../store/authors/selectors';
 import { Button } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
-import { useEffect } from 'react';
-import { authorsAPI, coursesAPI } from '../../api/api';
-import { setAuthorsAC } from '../../store/authors/actionCreators';
-import { setCoursesAC } from '../../store/courses/actionCreator';
+import { useAppSelector } from '../../hooks';
+import { getCurrentUser } from '../../store/user/selectors';
 
-const ExistedCourses = () => {
+const Courses = () => {
 	const navigate = useNavigate();
-	const courses = useSelector(getCourses);
-	const coursesAuthors = useSelector(getAuthors);
-
+	const courses = useAppSelector(getCourses);
+	const coursesAuthors = useAppSelector(getAuthors);
+	const user = useAppSelector(getCurrentUser);
 	const getAuthorsName = (id: string): string => {
 		const author = coursesAuthors.find((author) => author.id === id);
 		return author?.name || '';
@@ -34,16 +31,18 @@ const ExistedCourses = () => {
 					{...item}
 				/>
 			))}
-			<Button
-				onClick={() => {
-					navigate('add');
-				}}
-			>
-				Add new course
-				<PlusLg />
-			</Button>
+			{user.role === 'admin' && (
+				<Button
+					onClick={() => {
+						navigate('add');
+					}}
+				>
+					Add new course
+					<PlusLg />
+				</Button>
+			)}
 		</div>
 	);
 };
 
-export default ExistedCourses;
+export default Courses;

@@ -1,7 +1,6 @@
 import {
-	ADD_COURSES_AUTHOR,
 	CREATE_AUTHOR,
-	DELETE_COURSES_AUTHOR,
+	DELETE_AUTHOR,
 	SET_AUTHORS,
 	SET_COURSES_AUTHORS,
 } from './actionTypes';
@@ -17,17 +16,12 @@ export const createAuthorAC = (author: Author) => ({
 	author,
 });
 
-export const addCoursesAuthorAC = (author: Author) => ({
-	type: ADD_COURSES_AUTHOR,
-	author,
-});
-
-export const deleteCoursesAuthorAC = (author: Author) => ({
-	type: DELETE_COURSES_AUTHOR,
-	author,
-});
-
 export const setCoursesAuthorsAC = (authors: string[]) => ({
 	type: SET_COURSES_AUTHORS,
 	authors,
+});
+
+export const deleteAuthorAC = (id: string) => ({
+	type: DELETE_AUTHOR,
+	id,
 });

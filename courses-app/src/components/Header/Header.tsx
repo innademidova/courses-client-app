@@ -2,25 +2,18 @@ import { Logo } from './components/Logo/Logo';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { routes } from '../../common/constants/routes';
-import { authAPI } from '../../api/api';
-import { localStorageKeys } from '../../common/constants/localStorage';
+
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+
 import { getCurrentUser } from '../../store/user/selectors';
-import { logoutAC } from '../../store/user/actionCreator';
+
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { logout } from '../../store/user/thunk';
 
 const Header = () => {
-	const user = useSelector(getCurrentUser);
-	const dispatch = useDispatch();
-	const logout = () => {
-		const token = localStorage.getItem('access_token');
-		if (token) {
-			authAPI.logout(token);
-			dispatch(logoutAC());
-		}
-	};
+	const user = useAppSelector(getCurrentUser);
+	const dispatch = useAppDispatch();
 	return (
 		<Navbar bg='dark' variant='dark' expand='lg'>
 			<Container>
@@ -41,14 +34,13 @@ const Header = () => {
 								<Nav.Link>{user.name}</Nav.Link>
 								<Nav.Link
 									onClick={() => {
-										logout();
-										localStorage.removeItem(localStorageKeys.token);
+										dispatch(logout());
 									}}
 								>
 									Logout
 								</Nav.Link>
 							</Nav>
-						) : (
+						) : !user.isFetching ? (
 							<Nav>
 								<Nav.Link as={Link} to={routes.login}>
 									Login
@@ -57,6 +49,8 @@ const Header = () => {
 									Register
 								</Nav.Link>
 							</Nav>
+						) : (
+							<></>
 						)}
 					</Nav>
 				</Navbar.Collapse>

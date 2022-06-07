@@ -1,3 +1,7 @@
 export const SET_COURSES = 'SET_COURSES';
 export const SEARCH_COURSES = 'SEARCH_COURSES';
 export const ADD_NEW_COURSE = 'ADD_NEW_COURSE';
+export const DELETE_COURSE = 'DELETE_COURSE';
+export const UPDATE_COURSE = 'UPDATE_COURSE';
+export const GET_COURSE = 'GET_COURSE';
+export const TOGGLE_IS_FETCHING = 'COURSES_IS_FETCHING';

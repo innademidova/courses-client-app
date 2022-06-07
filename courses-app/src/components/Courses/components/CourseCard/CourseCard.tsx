@@ -1,9 +1,12 @@
-import { convertMinutesToHours } from '../../../../common/helpers/pipeDuration';
+import { convertMinutesToHours } from '../../../../common/helpers';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 
 import './CourseCard.css';
 import { useNavigate } from 'react-router-dom';
 import { Eye, Pencil, Trash3 } from 'react-bootstrap-icons';
+import { useAppDispatch, useAppSelector } from '../../../../hooks';
+import { deleteCourse } from '../../../../store/courses/thunk';
+import { getCurrentUser } from '../../../../store/user/selectors';
 
 export interface CourseCardInterface {
 	id: string;
@@ -14,6 +17,8 @@ export interface CourseCardInterface {
 	duration: number;
 }
 const CourseCard = (props: CourseCardInterface) => {
+	const dispatch = useAppDispatch();
+	const user = useAppSelector(getCurrentUser);
 	const navigate = useNavigate();
 	const courseId = props.id;
 	return (
@@ -35,12 +40,24 @@ const CourseCard = (props: CourseCardInterface) => {
 								<Button className='me-1' onClick={() => navigate(courseId)}>
 									<Eye />
 								</Button>
-								<Button className='me-1'>
-									<Pencil />
-								</Button>
-								<Button className='me-1'>
-									<Trash3 />
-								</Button>
+								{user.role === 'admin' ? (
+									<>
+										<Button
+											onClick={() => navigate(`/courses/update/${courseId}`)}
+											className='me-1'
+										>
+											<Pencil />
+										</Button>
+										<Button
+											onClick={() => dispatch(deleteCourse(courseId))}
+											className='me-1'
+										>
+											<Trash3 />
+										</Button>
+									</>
+								) : (
+									<></>
+								)}
 							</div>
 						</Col>
 					</Row>

@@ -10,6 +10,7 @@ const reducers = combineReducers({
 	courses: coursesReducer,
 	user: userReducer,
 });
+
 const store = configureStore({
 	reducer: reducers,
 });

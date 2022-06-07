@@ -1,47 +1,78 @@
-import { v4 as uuidv4 } from 'uuid';
-
-import { convertMinutesToHours, dateGenerator } from '../../common/helpers';
+import { convertMinutesToHours } from '../../common/helpers';
 import { AddAuthors } from '.';
 
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Formik, FormikValues } from 'formik';
-import validationSchema from './validation/validation';
+import { validationSchema } from './validation/validation';
 import { FORM_FIELDS, FORM_INITIAL_VALUES } from './constants/constants';
 import { Button, Form, Row } from 'react-bootstrap';
 import { Col } from 'react-bootstrap';
-import { createAuthorAC } from '../../store/authors/actionCreators';
 import { useDispatch } from 'react-redux';
-import { addCourseAC } from '../../store/courses/actionCreator';
 import { useSelector } from 'react-redux';
 import { getCoursesAuthors } from '../../store/authors/selectors';
 import { AppDispatch } from '../../store';
 import { routes } from '../../common/constants/routes';
+import {
+	addNewCourse,
+	getCourse,
+	updateCourse,
+} from '../../store/courses/thunk';
+import Preloader from '../../common/Preloader/Preloader';
+import { useAppSelector } from '../../hooks';
+import {
+	getCoursesState,
+	getCurrentCourse,
+} from '../../store/courses/selectors';
+import React, { useEffect } from 'react';
+import { addAuthor } from '../../store/authors/thunk';
 
-const CreateCourse = () => {
+const CourseForm = () => {
+	const { courseId } = useParams();
 	const dispatch = useDispatch<AppDispatch>();
-	const coursesAuthors = useSelector(getCoursesAuthors);
-	const createNewAuthor = (name: string) => {
-		const newAuthor = { id: uuidv4(), name };
-		dispatch(createAuthorAC(newAuthor));
-	};
 	const navigate = useNavigate();
+	const coursesAuthors = useSelector(getCoursesAuthors);
+	const { isFetching } = useAppSelector(getCoursesState);
+	const course = useAppSelector(getCurrentCourse);
+	useEffect(() => {
+		if (courseId) {
+			dispatch(getCourse(courseId));
+		}
+	}, [dispatch, courseId]);
+	if (courseId) {
+		if (isFetching) {
+			return <Preloader />;
+		}
+		if (!course) {
+			return <Navigate to='/404' />;
+		}
+	}
 	return (
 		<Formik
 			validationSchema={validationSchema}
 			onSubmit={(values: FormikValues) => {
 				const newCourse = {
-					id: uuidv4(),
 					title: values[FORM_FIELDS.title],
 					description: values[FORM_FIELDS.description],
-					duration: values[FORM_FIELDS.duration],
-					creationDate: dateGenerator(),
+					duration: +values[FORM_FIELDS.duration],
 					authors: coursesAuthors,
 				};
-
-				dispatch(addCourseAC(newCourse));
+				if (courseId) {
+					dispatch(updateCourse(courseId, newCourse));
+				} else {
+					dispatch(addNewCourse(newCourse));
+				}
 				navigate(routes.courses);
 			}}
-			initialValues={FORM_INITIAL_VALUES}
+			initialValues={
+				courseId && course
+					? {
+							title: course.title,
+							description: course.description,
+							duration: course.duration.toString(),
+							author: '',
+					  }
+					: FORM_INITIAL_VALUES
+			}
 		>
 			{({
 				handleSubmit,
@@ -52,7 +83,7 @@ const CreateCourse = () => {
 				isValid,
 				errors,
 			}) => (
-				<Form noValidate onSubmit={handleSubmit}>
+				<form noValidate onSubmit={handleSubmit}>
 					<Row className='mb-3'>
 						<Form.Group as={Col} md='4' controlId='title'>
 							<Form.Label>Title</Form.Label>
@@ -96,7 +127,6 @@ const CreateCourse = () => {
 					</Row>
 					<Row className='mb-3'>
 						<Form.Group as={Col} md='6' controlId='author'>
-							<h4>Add author</h4>
 							<Form.Label>Add author</Form.Label>
 							<Form.Control
 								type='text'
@@ -115,12 +145,13 @@ const CreateCourse = () => {
 							</Form.Control.Feedback>
 
 							<Button
-								type='button'
-								onClick={() => {
-									createNewAuthor(values[FORM_FIELDS.author]);
-								}}
+								disabled={
+									!!errors[FORM_FIELDS.author] ||
+									!values[FORM_FIELDS.author].length
+								}
+								onClick={() => dispatch(addAuthor(values[FORM_FIELDS.author]))}
 							>
-								Create author{' '}
+								Create author
 							</Button>
 						</Form.Group>
 					</Row>
@@ -152,12 +183,12 @@ const CreateCourse = () => {
 
 					<AddAuthors />
 					<Button type='submit' disabled={!isValid || !coursesAuthors.length}>
-						Create course
+						{courseId ? 'Update Course' : 'Create course'}
 					</Button>
-				</Form>
+				</form>
 			)}
 		</Formik>
 	);
 };
 
-export default CreateCourse;
+export default CourseForm;
