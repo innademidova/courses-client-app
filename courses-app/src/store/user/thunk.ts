@@ -1,18 +1,30 @@
-import { AppDispatch } from './../index';
-import { usersAPI } from './../../api/api';
-import { getMeAC, toggleIsFetching } from './actionCreator';
+import { AppDispatch } from '../index';
+import { authAPI, usersAPI } from '../../api/api';
+import { getMeAC, loginAC, logoutAC, toggleIsFetching } from './actionCreator';
+import { localStorageKeys } from '../../common/constants/localStorage';
 
-const getMe = () => async (dispatch: AppDispatch) => {
-	dispatch(toggleIsFetching(true));
-	const delay = (ms: number) =>
-		new Promise((resolve) => {
-			setTimeout(resolve, ms);
-		});
-	await delay(2000);
+export const login =
+	(email: string, password: string) => async (dispatch: AppDispatch) => {
+		const data = await authAPI.login({ email, password });
+		const token = data.result;
+		const user = data.user;
+		localStorage.setItem('access_token', token);
+		dispatch(loginAC(user, token));
+		dispatch(getMe());
+	};
 
-	const data = await usersAPI.getMe();
-	dispatch(toggleIsFetching(false));
-	dispatch(getMeAC(data.data.result));
+export const logout = () => async (dispatch: AppDispatch) => {
+	await authAPI.logout();
+	dispatch(logoutAC());
+	localStorage.removeItem(localStorageKeys.token);
 };
 
-export default getMe;
+export const getMe = () => async (dispatch: AppDispatch) => {
+	dispatch(toggleIsFetching(true));
+	try {
+		const data = await usersAPI.getMe();
+		dispatch(getMeAC(data.data.result));
+	} finally {
+		dispatch(toggleIsFetching(false));
+	}
+};

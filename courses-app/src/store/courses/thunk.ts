@@ -9,6 +9,7 @@ import {
 } from './actionCreator';
 import { coursesAPI } from '../../api/api';
 import { AppDispatch } from '../index';
+import { setCoursesAuthorsAC } from '../authors/actionCreators';
 
 export const setCourses = () => async (dispatch: AppDispatch) => {
 	const courses = await coursesAPI.getCourses();
@@ -38,7 +39,9 @@ export const getCourse = (id: string) => async (dispatch: AppDispatch) => {
 		const course = await coursesAPI.getCourse(id);
 		dispatch(toggleIsFetching(false));
 		dispatch(getCourseAC(course));
+		dispatch(setCoursesAuthorsAC(course.authors));
 	} catch {
 		dispatch(toggleIsFetching(false));
+		setTimeout(() => dispatch(toggleIsFetching(true)));
 	}
 };

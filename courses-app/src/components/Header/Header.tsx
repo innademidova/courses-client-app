@@ -2,24 +2,18 @@ import { Logo } from './components/Logo/Logo';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { routes } from '../../common/constants/routes';
-import { authAPI } from '../../api/api';
-import { localStorageKeys } from '../../common/constants/localStorage';
+
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useDispatch } from 'react-redux';
 
 import { getCurrentUser } from '../../store/user/selectors';
-import { logoutAC } from '../../store/user/actionCreator';
-import { useAppSelector } from '../../hooks';
+
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { logout } from '../../store/user/thunk';
 
 const Header = () => {
 	const user = useAppSelector(getCurrentUser);
-	const dispatch = useDispatch();
-	const logout = () => {
-		authAPI.logout();
-		dispatch(logoutAC());
-		localStorage.removeItem(localStorageKeys.token);
-	};
+	const dispatch = useAppDispatch();
 	return (
 		<Navbar bg='dark' variant='dark' expand='lg'>
 			<Container>
@@ -40,7 +34,7 @@ const Header = () => {
 								<Nav.Link>{user.name}</Nav.Link>
 								<Nav.Link
 									onClick={() => {
-										logout();
+										dispatch(logout());
 									}}
 								>
 									Logout

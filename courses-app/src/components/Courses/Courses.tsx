@@ -9,12 +9,13 @@ import { getCourses } from '../../store/courses/selectors';
 import { getAuthors } from '../../store/authors/selectors';
 import { Button } from 'react-bootstrap';
 import { useAppSelector } from '../../hooks';
+import { getCurrentUser } from '../../store/user/selectors';
 
 const Courses = () => {
 	const navigate = useNavigate();
 	const courses = useAppSelector(getCourses);
 	const coursesAuthors = useAppSelector(getAuthors);
-
+	const user = useAppSelector(getCurrentUser);
 	const getAuthorsName = (id: string): string => {
 		const author = coursesAuthors.find((author) => author.id === id);
 		return author?.name || '';
@@ -30,14 +31,16 @@ const Courses = () => {
 					{...item}
 				/>
 			))}
-			<Button
-				onClick={() => {
-					navigate('add');
-				}}
-			>
-				Add new course
-				<PlusLg />
-			</Button>
+			{user.role === 'admin' && (
+				<Button
+					onClick={() => {
+						navigate('add');
+					}}
+				>
+					Add new course
+					<PlusLg />
+				</Button>
+			)}
 		</div>
 	);
 };

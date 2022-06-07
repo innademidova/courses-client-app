@@ -3,15 +3,12 @@ import { Formik } from 'formik';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 
 import { Link, useNavigate } from 'react-router-dom';
-import { authAPI } from '../../api/api';
 
-import { routes } from '../../common/constants/routes';
 import { useAppDispatch } from '../../hooks';
-
-import { loginAC } from '../../store/user/actionCreator';
 
 import { FORM_FIELDS, FORM_INITIAL_VALUES } from './constants/constants';
 import validationSchema from './validation/validation';
+import { login } from '../../store/user/thunk';
 
 const Login = () => {
 	const navigate = useNavigate();
@@ -24,15 +21,8 @@ const Login = () => {
 				onSubmit={(values) => {
 					const email = values[FORM_FIELDS.email];
 					const password = values[FORM_FIELDS.password];
-					authAPI.login({ email, password }).then((response) => {
-						const token = response.data.result;
-						const user = response.data.user;
-						localStorage.setItem('access_token', token);
-						dispatch(loginAC(user, token));
-						if (response.data.successful) {
-							navigate(routes.courses);
-						}
-					});
+					dispatch(login(email, password));
+					navigate('/courses');
 				}}
 				initialValues={FORM_INITIAL_VALUES}
 			>
@@ -50,7 +40,7 @@ const Login = () => {
 							<Form.Group as={Col} md='6' controlId='email'>
 								<Form.Label>Email</Form.Label>
 								<Form.Control
-									type='text'
+									type='email'
 									placeholder={FORM_FIELDS.email}
 									name={FORM_FIELDS.email}
 									onBlur={handleBlur}
@@ -69,7 +59,7 @@ const Login = () => {
 							<Form.Group as={Col} md='6' controlId='password'>
 								<Form.Label>Password</Form.Label>
 								<Form.Control
-									type='text'
+									type='password'
 									placeholder={FORM_FIELDS.password}
 									name={FORM_FIELDS.password}
 									value={values[FORM_FIELDS.password]}

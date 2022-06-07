@@ -4,7 +4,7 @@ import Preloader from '../../common/Preloader/Preloader';
 import { useAppSelector } from '../../hooks';
 import { getCurrentUser } from '../../store/user/selectors';
 
-const PrivateRoute = ({ children }: any) => {
+const AdminPrivateRoute = ({ children }: any) => {
 	const { role, isFetching } = useAppSelector(getCurrentUser);
 	const isAdmin = role === 'admin';
 	if (isFetching) {
@@ -13,4 +13,4 @@ const PrivateRoute = ({ children }: any) => {
 	return isAdmin ? children : <Navigate to={routes.courses} />;
 };
 
-export default PrivateRoute;
+export default AdminPrivateRoute;

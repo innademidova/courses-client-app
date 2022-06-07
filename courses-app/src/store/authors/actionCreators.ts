@@ -1,4 +1,9 @@
-import { CREATE_AUTHOR, SET_AUTHORS, SET_COURSES_AUTHORS } from './actionTypes';
+import {
+	CREATE_AUTHOR,
+	DELETE_AUTHOR,
+	SET_AUTHORS,
+	SET_COURSES_AUTHORS,
+} from './actionTypes';
 import { Author } from '../../common/models/author';
 
 export const setAuthorsAC = (authors: Author[]) => ({
@@ -14,4 +19,9 @@ export const createAuthorAC = (author: Author) => ({
 export const setCoursesAuthorsAC = (authors: string[]) => ({
 	type: SET_COURSES_AUTHORS,
 	authors,
+});
+
+export const deleteAuthorAC = (id: string) => ({
+	type: DELETE_AUTHOR,
+	id,
 });

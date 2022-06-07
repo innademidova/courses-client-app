@@ -1,10 +1,9 @@
-import { ApiResponse } from './../common/models/apiResponse';
-import { Course, CoursesForm } from './../common/models/course';
+import { ApiResponse } from '../common/models/apiResponse';
+import { Course, CoursesForm } from '../common/models/course';
 import axios from 'axios';
 import { LoginResponse } from '../common/models/loginResponse';
 import { UserResponse } from '../common/models/userResponse';
 import { Author } from '../common/models/author';
-import { AuthorForm } from '../components/CourseForm/constants/constants';
 
 const instance = axios.create({
 	baseURL: 'http://localhost:4000/',
@@ -23,8 +22,9 @@ export const authAPI = {
 	register(newUser: { name: string; email: string; password: string }) {
 		return instance.post<LoginResponse>('register', newUser);
 	},
-	login(user: { email: string; password: string }) {
-		return instance.post<LoginResponse>('login', user);
+	async login(user: { email: string; password: string }) {
+		const response = await instance.post<LoginResponse>('login', user);
+		return response.data;
 	},
 	logout() {
 		return instance.delete('logout');
@@ -42,10 +42,13 @@ export const authorsAPI = {
 		const response = await instance.get<ApiResponse<Author[]>>('authors/all');
 		return response.data.result;
 	},
-	addAuthor(author: AuthorForm) {
+	addAuthor(author: string) {
 		return instance.post<ApiResponse<Author>>('/authors/add', {
-			name: author.name,
+			name: author,
 		});
+	},
+	deleteAuthor(id: string) {
+		return instance.delete<ApiResponse<string>>(`/authors/${id}`);
 	},
 };
 
